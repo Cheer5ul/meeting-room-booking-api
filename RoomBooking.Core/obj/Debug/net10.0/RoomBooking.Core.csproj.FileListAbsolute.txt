@@ -1,0 +1,11 @@
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\bin\Debug\net10.0\RoomBooking.Core.deps.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\bin\Debug\net10.0\RoomBooking.Core.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\bin\Debug\net10.0\RoomBooking.Core.pdb
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.AssemblyInfoInputs.cache
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.AssemblyInfo.cs
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.csproj.CoreCompileInputs.cache
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\refint\RoomBooking.Core.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\RoomBooking.Core.pdb
+D:\RiderProjects\RoomBooking.API\RoomBooking.Core\obj\Debug\net10.0\ref\RoomBooking.Core.dll
