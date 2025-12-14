@@ -1,6 +1,6 @@
 ﻿using RoomBooking.Core;
 
-namespace RoomBooking.Application.Validations.Abstractions;
+namespace RoomBooking.Application.Validations.Abstractions.Bookings;
 
 public interface IBookingCreationValidator
 {

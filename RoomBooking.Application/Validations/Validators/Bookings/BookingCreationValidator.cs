@@ -1,9 +1,8 @@
-﻿using RoomBooking.Application.Validations.Abstractions;
+﻿using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Core;
-using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
 
-namespace RoomBooking.Application.Validations.Validators;
+namespace RoomBooking.Application.Validations.Validators.Bookings;
 
 public class BookingCreationValidator : IBookingCreationValidator
 {

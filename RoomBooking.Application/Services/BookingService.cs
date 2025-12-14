@@ -1,4 +1,5 @@
 ﻿using RoomBooking.Application.Validations.Abstractions;
+using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Application.Validations.Exceptions;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions;

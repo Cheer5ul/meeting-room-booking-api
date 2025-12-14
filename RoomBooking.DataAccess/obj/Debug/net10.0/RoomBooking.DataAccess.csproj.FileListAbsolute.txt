@@ -15,3 +15,4 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.DataAccess\obj\Debug\net10.0\ref\Ro
 D:\RiderProjects\RoomBooking.API\RoomBooking.DataAccess\bin\Debug\net10.0\RoomBooking.Core.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.DataAccess\bin\Debug\net10.0\RoomBooking.Core.pdb
 D:\RiderProjects\RoomBooking.API\RoomBooking.DataAccess\obj\Debug\net10.0\RoomBook.6604282B.Up2Date
+D:\RiderProjects\RoomBooking.API\RoomBooking.DataAccess\obj\Debug\net10.0\RoomBooking.DataAccess.sourcelink.json

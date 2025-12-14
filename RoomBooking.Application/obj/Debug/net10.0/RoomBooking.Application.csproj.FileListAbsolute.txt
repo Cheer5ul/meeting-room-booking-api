@@ -13,3 +13,4 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.Application\obj\Debug\net10.0\RoomB
 D:\RiderProjects\RoomBooking.API\RoomBooking.Application\obj\Debug\net10.0\refint\RoomBooking.Application.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.Application\obj\Debug\net10.0\RoomBooking.Application.pdb
 D:\RiderProjects\RoomBooking.API\RoomBooking.Application\obj\Debug\net10.0\ref\RoomBooking.Application.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.Application\obj\Debug\net10.0\RoomBooking.Application.sourcelink.json

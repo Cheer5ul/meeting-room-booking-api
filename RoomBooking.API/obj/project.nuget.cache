@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "pWav0ldKZZ0=",
+  "dgSpecHash": "Sz0m+OwU+XY=",
   "success": true,
   "projectFilePath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\oxyge\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
+    "C:\\Users\\oxyge\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.1.1\\fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\microsoft.build\\17.7.2\\microsoft.build.17.7.2.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\microsoft.build.framework\\17.14.28\\microsoft.build.framework.17.14.28.nupkg.sha512",

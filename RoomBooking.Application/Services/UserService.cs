@@ -1,11 +1,14 @@
-﻿using RoomBooking.Core;
+﻿using RoomBooking.Application.Validations.Abstractions;
+using RoomBooking.Application.Validations.Abstractions.Users;
+using RoomBooking.Application.Validations.Validators;
+using RoomBooking.Core;
 using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 
 namespace RoomBooking.Application.Services;
 
-public class UserService(IUserRepository userRepository) : IUserService
+public class UserService(IUserRepository userRepository, IUserDeletionValidator deletionValidator) : IUserService
 {
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default)
     {
@@ -30,6 +33,14 @@ public class UserService(IUserRepository userRepository) : IUserService
 
     public async Task<Guid> DeleteUser(Guid id, CancellationToken cancellationToken = default)
     {
+        var validator = await deletionValidator.IsUserExists(id, cancellationToken);
+
+        if (!validator)
+        {
+            //throwing exception for custom error middleware handler check, should use result pattern or error array
+            throw new Exception("User does not exist");
+        }
+        
         return await userRepository.Delete(id, cancellationToken);
     }
 }
