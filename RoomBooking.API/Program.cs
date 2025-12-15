@@ -65,9 +65,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseExceptionHandler();
-//
+
 // app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
 
 app.Run();
+app.Logger.LogInformation("------------------RoomBooking API has been started-------------------");

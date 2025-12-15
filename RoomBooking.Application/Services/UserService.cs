@@ -1,15 +1,17 @@
-﻿using RoomBooking.Application.Validations.Abstractions;
+﻿using Microsoft.Extensions.Logging;
 using RoomBooking.Application.Validations.Abstractions.Users;
-using RoomBooking.Application.Validations.Validators;
 using RoomBooking.Core;
-using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 
 namespace RoomBooking.Application.Services;
 
-public class UserService(IUserRepository userRepository, IUserDeletionValidator deletionValidator) : IUserService
+public class UserService(
+    IUserRepository userRepository, 
+    IUserDeletionValidator deletionValidator,
+    ILogger<UserService> logger) : IUserService
 {
+    
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default)
     {
         return await userRepository.Get(cancellationToken);
@@ -43,4 +45,5 @@ public class UserService(IUserRepository userRepository, IUserDeletionValidator 
         
         return await userRepository.Delete(id, cancellationToken);
     }
+    
 }
