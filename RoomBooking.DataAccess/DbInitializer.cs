@@ -2,7 +2,7 @@
 
 namespace RoomBooking.DataAccess;
 
-public class DbInitializer
+public abstract class DbInitializer
 {
     public static async Task InitializeAsync(RoomBookingDbContext context)
     {
