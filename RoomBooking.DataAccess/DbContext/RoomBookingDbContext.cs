@@ -17,6 +17,7 @@ public class RoomBookingDbContext(DbContextOptions<RoomBookingDbContext> options
         modelBuilder.ApplyConfiguration(new RoomConfiguration());
         modelBuilder.ApplyConfiguration(new BookingConfiguration());
         
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder);         
     }
+    
 }

@@ -142,3 +142,12 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\RoomBooking.C
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\obj\Debug\net10.0\RoomBooking.API.sourcelink.json
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\FluentValidation.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.AspNetCore.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Extensions.Hosting.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Extensions.Logging.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Formatting.Compact.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Settings.Configuration.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Console.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.File.dll

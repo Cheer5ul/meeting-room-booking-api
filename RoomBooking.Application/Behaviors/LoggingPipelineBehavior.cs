@@ -39,7 +39,7 @@
 //         }
 //         
 //         _logger.LogInformation(
-//             "Completed reques {@RequestName}, {@DateTimeUtc}",
+//             "Completed request {@RequestName}, {@DateTimeUtc}",
 //             typeof(TRequest).Name,
 //             DateTime.UtcNow);
 //         

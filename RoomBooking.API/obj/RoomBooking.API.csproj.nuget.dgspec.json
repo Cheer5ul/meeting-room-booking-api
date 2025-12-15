@@ -75,6 +75,10 @@
               "target": "Package",
               "version": "[10.0.0, )"
             },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[10.0.1, )"
@@ -133,6 +137,9 @@
             "projectReferences": {
               "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
                 "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj"
+              },
+              "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj"
               }
             }
           }
