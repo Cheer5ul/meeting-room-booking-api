@@ -21,7 +21,7 @@ public class UserService(
             ServiceName,
             methdodName,
             DateTime.UtcNow);
-
+        
         try
         {
             var result = await userRepository.Get(cancellationToken);
