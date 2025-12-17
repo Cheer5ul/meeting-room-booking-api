@@ -21,4 +21,9 @@
       <Folder Include="Interfaces\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="14.0.0" />
+      <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    </ItemGroup>
+
 </Project>

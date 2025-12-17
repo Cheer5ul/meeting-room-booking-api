@@ -4,59 +4,46 @@ using RoomBooking.Application.Validations.Abstractions.Users;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
+using RoomBooking.Application.Services;
+
 
 namespace RoomBooking.Application.Services;
 
 public class UserService(
     IUserRepository userRepository, 
     IUserDeletionValidator deletionValidator,
-    ILogger<UserService> logger) : IUserService
+    IServiceLogger<User> logger) : IUserService
 {
     private const string ServiceName = nameof(UserService);
-    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default)
     {
-        const string methdodName = nameof(GetAllUsers);
-        logger.LogInformation("----------------- {@RequestName}.{@Method} Started | {@DateTimeUtc} -----------------",
-            ServiceName,
-            methdodName,
-            DateTime.UtcNow);
-        
         try
         {
             var result = await userRepository.Get(cancellationToken);
-
-            if (result == null || !result.Any())
-            {
-                logger.LogWarning("----------------- {Service}.{Method}: No users found | {@DatetimeUtc}----------------- ",
-                    ServiceName,
-                    methdodName,
-                    DateTime.UtcNow);
-                return new List<User>();
-            }
-            
-            logger.LogInformation("----------------- {Service}.{Method}: completed. Found {@Count} | {@DatetimeUtc}----------------- ",
-                ServiceName,
-                methdodName,
-                result.Count,
-                DateTime.UtcNow);
-            
+            logger.LogResultCollection(result, ServiceName, nameof(GetAllUsers));
             return result;
         }
         catch (Exception exception)
         {
-            logger.LogError("----------------- {Service}.{Method}: failed with error {@ErrorMessage}) | {@DatetimeUtc}----------------- ", 
-                ServiceName,
-                methdodName,
-                exception,
-                DateTime.UtcNow);
+            logger.LogError(exception, ServiceName, nameof(GetAllUsers));
             throw;
         }
+        
     }
 
     public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken = default)
     {
-        return await userRepository.GetById(id, cancellationToken);
+        try
+        {
+            var result =  await userRepository.GetById(id, cancellationToken);
+            logger.LogResult(result, ServiceName, nameof(GetUserById));
+            return result;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, ServiceName, nameof(GetAllUsers));
+            throw;
+        }
     }
 
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken = default)

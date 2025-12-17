@@ -23,4 +23,8 @@
       <ProjectReference Include="..\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="logs\" />
+    </ItemGroup>
+
 </Project>
