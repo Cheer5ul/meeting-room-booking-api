@@ -45,7 +45,7 @@ public class UserService(
             throw;
         }
     }
-
+    //Practising logging
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken = default)
     {
         return await userRepository.Create(user, cancellationToken);
