@@ -1,4 +1,5 @@
 ﻿using RoomBooking.Core;
+using RoomBooking.Core.Models;
 
 namespace RoomBooking.Application.Validations.Abstractions.Bookings;
 

@@ -1,9 +1,9 @@
-﻿namespace RoomBooking.Core;
+﻿namespace RoomBooking.Core.Models;
 
 public class Booking
 {
-    public static readonly TimeSpan MAX_DIFF = new TimeSpan(6, 0, 0);
-    public Booking(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string purpose = "")
+    public static readonly TimeSpan MaxDiff = new TimeSpan(6, 0, 0);
+    public Booking(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
         Id = bookingId;
         RoomId = roomId;
@@ -20,13 +20,13 @@ public class Booking
     public string? Purpose { get; } 
 
     public static (Booking booking, string? error)
-        Create(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string purpose = "")
+        Create(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
         string error = string.Empty;
         
         if (userId == Guid.Empty || roomId == Guid.Empty)
             error = "IDs cannot be null";
-        if(startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate < endDate || startDate - endDate > MAX_DIFF
+        if(startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate < endDate || startDate - endDate > MaxDiff
            || startDate == endDate)
             error = "Date time is invalid";
         

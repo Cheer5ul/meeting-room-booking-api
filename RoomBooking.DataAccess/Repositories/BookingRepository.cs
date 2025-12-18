@@ -2,6 +2,7 @@
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
+using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.DbContext;
 using RoomBooking.DataAccess.Entities;
 
@@ -86,12 +87,13 @@ public class BookingRepository(RoomBookingDbContext dbContext) : IBookingReposit
         return bookingEntitiy.Id;
     }
 
-    public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
     {
-        await dbContext.Bookings.Where(b => b.Id == id)
+        var deleted = await dbContext.Bookings
+            .Where(b => b.Id == id)
             .ExecuteDeleteAsync(cancellationToken);
-        
-        return id;
+
+        return deleted > 0;
     }
     
     

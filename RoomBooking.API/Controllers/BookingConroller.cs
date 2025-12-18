@@ -2,6 +2,8 @@
 using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.Application.Services;
 using RoomBooking.Core;
+using RoomBooking.Core.Abstractions.Services;
+using RoomBooking.Core.Models;
 
 
 namespace RoomBooking.API.Controllers;
@@ -94,8 +96,13 @@ public class BookingController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<Guid>> DeleteBooking(Guid id, CancellationToken cancellationToken)
     {
-        var bookingId = await _bookingService.Delete(id, cancellationToken);
+        var result = await _bookingService.Delete(id, cancellationToken);
+
+        if (result.Errors.Any())
+        {
+            return BadRequest(result.Errors);
+        }
         
-        return Ok(bookingId);
+        return Ok(result.Guid);
     }
 }

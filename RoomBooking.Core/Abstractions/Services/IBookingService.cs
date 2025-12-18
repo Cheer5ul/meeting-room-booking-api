@@ -1,6 +1,6 @@
-﻿using RoomBooking.Core;
+﻿using RoomBooking.Core.Models;
 
-namespace RoomBooking.Application.Services;
+namespace RoomBooking.Core.Abstractions.Services;
 
 public interface IBookingService
 {
@@ -8,5 +8,5 @@ public interface IBookingService
     Task<List<Booking>> GetByRoom(Guid id, CancellationToken cancellationToken = default);
     Task<List<Booking>> GetByUser(Guid id, CancellationToken cancellationToken = default);
     Task<(Guid? Guid, List<string> Errors)> Create(Booking booking, CancellationToken cancellationToken = default);
-    Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default);
+    Task<(Guid? Guid, List<string> Errors)> Delete(Guid id, CancellationToken cancellationToken = default);
 }

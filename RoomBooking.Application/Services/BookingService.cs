@@ -1,9 +1,12 @@
-﻿using RoomBooking.Application.Validations.Abstractions;
+﻿using Microsoft.AspNetCore.Http.Timeouts;
+using RoomBooking.Application.Validations.Abstractions;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Application.Validations.Exceptions;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
+using RoomBooking.Core.Abstractions.Services;
+using RoomBooking.Core.Models;
 
 namespace RoomBooking.Application.Services;
 
@@ -37,8 +40,16 @@ public class BookingService(IBookingRepository repository, IBookingCreationValid
         return (id, errors);
     }
     
-    public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default)
+    public async Task<(Guid? Guid, List<string> Errors)> Delete(Guid id, CancellationToken cancellationToken = default)
     {
-        return await repository.Delete(id, cancellationToken);
+        
+        var wasDeleted = await repository.Delete(id, cancellationToken);
+        
+        if (!wasDeleted)
+        {
+            return (id, new List<string>() { "Booking not found." });
+        }
+
+        return (id, new List<string>());
     }
 }

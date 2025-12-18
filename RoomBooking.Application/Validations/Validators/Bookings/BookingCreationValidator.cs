@@ -1,6 +1,7 @@
 ﻿using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Repositories;
+using RoomBooking.Core.Models;
 
 namespace RoomBooking.Application.Validations.Validators.Bookings;
 

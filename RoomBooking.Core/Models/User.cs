@@ -1,4 +1,6 @@
-﻿namespace RoomBooking.Core;
+﻿using RoomBooking.Core.Models;
+
+namespace RoomBooking.Core;
 
 public class User
 {

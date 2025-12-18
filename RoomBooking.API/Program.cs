@@ -65,6 +65,8 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 
 builder.Services.AddSingleton(typeof(IServiceLogger<>), typeof(ServiceLogger<>));
 
+// builder.Services.AddProblemDetails();
+
 // old version
 //builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 

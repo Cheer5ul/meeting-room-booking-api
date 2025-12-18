@@ -1,4 +1,5 @@
 ﻿using RoomBooking.Core;
+using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.DataAccess.Mappers;

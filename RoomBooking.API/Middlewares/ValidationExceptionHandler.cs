@@ -22,7 +22,7 @@ public class ValidationExceptionHandler(
         {
             HttpContext = httpContext,
             Exception = exception,
-            ProblemDetails = new ProblemDetails
+            ProblemDetails = new ProblemDetails()
             {
                 Detail = "One or more validation errors occured",
                 Status = StatusCodes.Status400BadRequest,
