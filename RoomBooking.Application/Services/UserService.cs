@@ -5,6 +5,7 @@ using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Application.Services;
+using RoomBooking.Core.Models;
 
 
 namespace RoomBooking.Application.Services;

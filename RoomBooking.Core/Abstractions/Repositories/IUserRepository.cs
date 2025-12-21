@@ -1,4 +1,6 @@
-﻿namespace RoomBooking.Core.Abstractions.Repositories;
+﻿using RoomBooking.Core.Models;
+
+namespace RoomBooking.Core.Abstractions.Repositories;
 
 public interface IUserRepository
 {

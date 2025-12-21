@@ -3,6 +3,6 @@
 public record BookingRequest(
     Guid RoomId,
     Guid UserId,
-    DateTime StratTime,
+    DateTime StartTime,
     DateTime EndTime,
-    string? Purpose);
+    string? Purpose = null);

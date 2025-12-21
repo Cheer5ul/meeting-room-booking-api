@@ -1,0 +1,135 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using RoomBooking.Core.Results;
+using RoomBooking.Core.Results.Errors;
+
+namespace RoomBooking.API.FailureHandlers;
+
+public class FailureHandler
+{
+    public ActionResult HandleFailure(Result result, HttpContext httpContext)
+    {
+        if(!result.IsFailure)
+            throw new InvalidOperationException("Cannot handle success result.");
+        
+        var statusCode = GetStatusCode(result);
+        var allErrors = GetAllErrors(result);
+
+        var problem = new ProblemDetails()
+        {
+            Type = GetErrorType(result),
+            Title = GetErrorTitle(result),
+            Detail = GetErrorDetail(result),
+            Status = statusCode,
+            Instance = $"{httpContext.Request.Method} " +
+                       $"{httpContext.Request.Scheme}" +
+                       $"://{httpContext.Request.Host}" +
+                       $"{httpContext.Request.Path}",
+            Extensions = GetErrorExtensions(allErrors)!
+        };
+
+        return new ObjectResult(problem)
+        {
+            StatusCode = statusCode
+        };
+    }
+
+    private IReadOnlyList<Error> GetAllErrors(Result result)
+    {
+        var errors = new List<Error>();
+        
+        if(result.Error != null && result.Error != Error.None)
+            errors.Add(result.Error);
+        
+        if(result.Errors.Any())
+            errors.AddRange(result.Errors);
+
+        return errors;
+    }
+
+    private int GetStatusCode(Result result)
+    {
+        // if(result.Errors.Any())
+        //     return StatusCodes.Status400BadRequest;
+        
+        var allErrors = GetAllErrors(result);
+
+        if (!allErrors.Any())
+            return StatusCodes.Status500InternalServerError;
+
+
+        foreach (var error in allErrors)
+        {
+            if(ErrorCodeToStatus.TryGetValue(error.Code, out int statusCode))
+                return statusCode;
+        }
+
+
+        return StatusCodes.Status400BadRequest;
+    }
+
+    private static readonly Dictionary<string, int> ErrorCodeToStatus = new()
+    {
+        ["NotFound"] = StatusCodes.Status404NotFound,
+        ["Unauthorized"] = StatusCodes.Status401Unauthorized,
+        ["Forbidden"] = StatusCodes.Status403Forbidden,
+        ["Conflict"] = StatusCodes.Status409Conflict,
+        ["ValidationFailed"] = StatusCodes.Status400BadRequest,
+    };
+
+    private string GetErrorType(Result result)
+    {
+        if(result.Errors.Any())
+            return result.Errors.First().Code;
+        
+        return result.Error?.Code ?? "unknown";
+    }
+
+    private string GetErrorTitle(Result result)
+    {
+        if (result.Error?.Code is { Length: > 0 })
+            return result.Error.Code;
+
+        if (result.Errors.Count == 1)
+            return result.Errors[0].Code;
+        
+        return "Multiple errors occured";
+    }
+
+    private string? GetErrorDetail(Result result)
+    {
+        if (result.Error is not null && 
+            result.Error.Description != string.Empty &&
+            !string.IsNullOrEmpty(result.Error?.Description))
+            return result.Error.Description;
+        
+        if (result.Errors.Count == 1)
+            return result.Errors[0].Description;
+        
+        return string.Join("; ", result.Errors.Select(e => e.Description));
+    }
+
+    private Dictionary<string, object>? GetErrorExtensions(IReadOnlyList<Error> errors)
+    {
+        if (!errors.Any())
+            return null;
+        
+        var extensions = new Dictionary<string, object>();
+
+        if (errors.Count > 1)
+        {
+            extensions["errors"] = errors.Select(e => new
+            {
+                code = e.Code,
+                description = e.Description,
+            }).ToList();
+        }
+
+        if (errors.Count == 1 ||
+            errors[0].Code != string.Empty)
+        {
+            extensions["error"] = errors[0].Code;
+        }
+        
+        return extensions.Any() ?  extensions : null;
+    }
+}

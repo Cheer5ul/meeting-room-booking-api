@@ -1,8 +1,10 @@
-﻿namespace RoomBooking.Core.Models;
+﻿using RoomBooking.Core.Results;
+using RoomBooking.Core.Results.Errors;
+
+namespace RoomBooking.Core.Models;
 
 public class Booking
 {
-    public static readonly TimeSpan MaxDiff = new TimeSpan(6, 0, 0);
     public Booking(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
         Id = bookingId;
@@ -19,19 +21,19 @@ public class Booking
     public DateTime EndTime { get; }
     public string? Purpose { get; } 
 
-    public static (Booking booking, string? error)
+    public static (Booking booking, List<Error>? errors) 
         Create(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
-        string error = string.Empty;
-        
-        if (userId == Guid.Empty || roomId == Guid.Empty)
-            error = "IDs cannot be null";
-        if(startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate < endDate || startDate - endDate > MaxDiff
-           || startDate == endDate)
-            error = "Date time is invalid";
+        List<Error>? errors = null;
+        // if (userId == Guid.Empty || roomId == Guid.Empty || userId == roomId)
+        //     errors?.Add(BookingErrors.InvalidIDs);
+        // if(startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate < endDate || startDate - endDate > MaxDiff
+        //    || startDate == endDate)
+        //     error = "Date time is invalid";
         
         var booking = new Booking(bookingId, roomId, userId, startDate, endDate, purpose);
-        
-        return (booking, error);
+
+        return (booking, errors);
     }
+    
 }

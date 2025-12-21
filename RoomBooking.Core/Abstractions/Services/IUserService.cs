@@ -1,4 +1,6 @@
-﻿namespace RoomBooking.Core.Abstractions.Services;
+﻿using RoomBooking.Core.Models;
+
+namespace RoomBooking.Core.Abstractions.Services;
 
 public interface IUserService
 {

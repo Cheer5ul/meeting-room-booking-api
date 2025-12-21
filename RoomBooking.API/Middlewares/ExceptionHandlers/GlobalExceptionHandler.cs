@@ -1,10 +1,9 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoomBooking.API.Middlewares;
+namespace RoomBooking.API.Middlewares.ExceptionHandlers;
 
 internal sealed class GlobalExceptionHandler(
     IProblemDetailsService problemDetailsService,

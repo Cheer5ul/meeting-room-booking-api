@@ -2,44 +2,69 @@
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Results;
+using RoomBooking.Core.Results.Errors;
 
 namespace RoomBooking.Application.Validations.Validators.Bookings;
 
 public class BookingCreationValidator : IBookingCreationValidator
 {
-    private readonly IBookingRepository _repository;
+    private readonly IBookingRepository _bookingRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IRoomRepository _roomRepository;
     
-    public BookingCreationValidator(IBookingRepository  repository)
+    public BookingCreationValidator(IBookingRepository  bookingRepository, IUserRepository userRepository, IRoomRepository roomRepository)
     {
-        _repository = repository;
+        _bookingRepository = bookingRepository;
+        _userRepository = userRepository;
+        _roomRepository = roomRepository;
     }
 
-    public async Task<List<string>> Validate(Booking booking, CancellationToken cancellationToken = default)
+    public async Task<List<Error>> Validate(Booking booking, CancellationToken cancellationToken = default)
     {
-        var errors = new List<string>();
+        var errors = new List<Error>();
         if (booking.StartTime > booking.EndTime)
-            errors.Add("Start time must be before end time.");
+            errors.Add(BookingErrors.StartBeforeEndTime);
         
-        if(booking.EndTime -  booking.StartTime < TimeSpan.FromHours(6))
-            errors.Add("Booking duration cannot exceed 6 hours.");
+        if(booking.EndTime - booking.StartTime > TimeSpan.FromHours(6))
+            errors.Add(BookingErrors.DurationExceeded);
         
         if(booking.StartTime < DateTime.UtcNow)
-            errors.Add("Booking cannot be in the past.");
+            errors.Add(BookingErrors.InThePast);
+
+        if (booking.UserId == Guid.Empty ||
+            booking.RoomId == Guid.Empty ||
+            booking.UserId == booking.RoomId)
+        {
+            errors.Add(BookingErrors.InvalidIDs);
+        }
         
         //Async overlaps check
         if (!errors.Any())
         {
             var hasConflict = await CheckForOverlaps(booking, cancellationToken);
             if(hasConflict)
-                errors.Add("Room is already booked for this time");
+                errors.Add(BookingErrors.IsOverlapping);
+        }
+        
+        
+        if (!errors.Any())
+        {
+            var userFor = await _userRepository.GetById(booking.UserId, cancellationToken);
+            if (userFor == null || userFor.Id == Guid.Empty)
+                errors.Add(BookingErrors.UserNotExisting);
+
+            var roomFor = await _roomRepository.GetById(booking.RoomId, cancellationToken);
+            if(roomFor == null || roomFor.Id == Guid.Empty)
+                errors.Add(BookingErrors.RoomNotExisting);
         }
 
         return errors;
     }
     
-    public async Task<bool> CheckForOverlaps(Booking booking, CancellationToken cancellationToken = default)
+    private async Task<bool> CheckForOverlaps(Booking booking, CancellationToken cancellationToken = default)
     {
-        var existingItems = await _repository.GetByRoom(booking.RoomId, cancellationToken);
+        var existingItems = await _bookingRepository.GetByRoom(booking.RoomId, cancellationToken);
         
         return existingItems.Any(b => 
             booking.StartTime < b.EndTime && 

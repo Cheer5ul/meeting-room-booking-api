@@ -8,6 +8,8 @@ public class BookingConfiguration : IEntityTypeConfiguration<BookingEntity>
 {
     public void Configure(EntityTypeBuilder<BookingEntity> builder)
     {
+        builder.ToTable("Bookings");
+        
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
@@ -36,6 +38,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<BookingEntity>
                 v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
         builder.Property(x => x.Purpose)
+            .HasMaxLength(1000)
             .IsRequired(false);
     }
 }

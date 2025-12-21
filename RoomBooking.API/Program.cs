@@ -1,4 +1,5 @@
 using RoomBooking.API.Middlewares;
+using RoomBooking.API.Middlewares.ExceptionHandlers;
 using RoomBooking.Application.Services;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Application.Validations.Abstractions.Users;
@@ -74,7 +75,7 @@ var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-//Db initializing 
+//Db initializing
 using (var scope = app.Services.CreateScope())
 {
     //Getting service provider, which is used for dependencies solving 

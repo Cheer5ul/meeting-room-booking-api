@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = FluentValidation.ValidationException;
-namespace RoomBooking.API.Middlewares;
+namespace RoomBooking.API.Middlewares.ExceptionHandlers;
 
 public class ValidationExceptionHandler(
     IProblemDetailsService problemDetailsService,

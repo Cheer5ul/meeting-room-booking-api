@@ -32,7 +32,8 @@ namespace RoomBooking.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uuid");
@@ -49,7 +50,7 @@ namespace RoomBooking.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("RoomBooking.DataAccess.Entities.RoomEntity", b =>

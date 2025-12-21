@@ -49,7 +49,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<Guid>> CreateUser([FromBody] UserRequest userRequest,
         CancellationToken cancellationToken)
     {
-        var (user, error) = Core.User.Create(
+        var (user, error) = Core.Models.User.Create(
             Guid.NewGuid(),
              userRequest.Name,
              userRequest.Email,

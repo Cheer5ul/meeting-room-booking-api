@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RoomBooking.Core;
-using RoomBooking.Core.Abstractions;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.DbContext;
@@ -81,10 +79,12 @@ public class BookingRepository(RoomBookingDbContext dbContext) : IBookingReposit
             Purpose = booking.Purpose,
         };
         
-        await dbContext.Bookings.AddAsync(bookingEntitiy, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
         
+        await dbContext.Bookings.AddAsync(bookingEntitiy, cancellationToken);
+        await  dbContext.SaveChangesAsync(cancellationToken);
+
         return bookingEntitiy.Id;
+        
     }
 
     public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
