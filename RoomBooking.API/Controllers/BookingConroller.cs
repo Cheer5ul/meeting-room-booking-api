@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.API.FailureHandlers;
-using RoomBooking.Application.Services;
-using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
-using RoomBooking.Core.Results;
 
 
 namespace RoomBooking.API.Controllers;
@@ -16,8 +13,8 @@ namespace RoomBooking.API.Controllers;
 public class BookingController : ControllerBase
 {
     private readonly IBookingService _bookingService;
-    private readonly FailureHandler _failureHandler;
-    public BookingController(IBookingService bookingService, FailureHandler failureHandler)
+    private readonly IFailureHandler _failureHandler;
+    public BookingController(IBookingService bookingService, IFailureHandler failureHandler)
     {
         _bookingService = bookingService;
         _failureHandler = failureHandler;
@@ -43,15 +40,23 @@ public class BookingController : ControllerBase
             b.EndTime,
             b.Purpose));
         
+        
         return Ok(response);
     }
 
     [HttpGet("by-user/{userId:guid}")]
     public async Task<ActionResult<BookingResponse>> GetBookingByUser(Guid userId, CancellationToken cancellationToken)
     {
-        var bookings = await _bookingService.GetByUser(userId, cancellationToken);
+        var result = await _bookingService.GetByUser(userId, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulBookings = result.Value!;
         
-        var response = bookings.Select(b => new BookingResponse(
+        var response = successfulBookings.Select(b => new BookingResponse(
             b.Id,
             b.RoomId,
             b.UserId,
@@ -65,9 +70,16 @@ public class BookingController : ControllerBase
     [HttpGet("by-room/{roomId:guid}")]
     public async Task<ActionResult<BookingResponse>> GetBookingByRoom(Guid roomId, CancellationToken cancellationToken)
     {
-        var bookings = await _bookingService.GetByRoom(roomId, cancellationToken);
+        var result = await _bookingService.GetByRoom(roomId, cancellationToken);
         
-        var response = bookings.Select(b => new BookingResponse(
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+        
+        var successfulBookings = result.Value!;
+        
+        var response = successfulBookings.Select(b => new BookingResponse(
             b.Id,
             b.RoomId,
             b.UserId,
@@ -90,34 +102,14 @@ public class BookingController : ControllerBase
             bookingRequest.EndTime,
             bookingRequest.Purpose);
         
-        var bookingId = await _bookingService.Create(booking.booking, cancellationToken);
+        var result = await _bookingService.Create(booking.booking, cancellationToken);
 
-        if (bookingId.Errors.Any())
+        if (result.IsFailure)
         {
-            var modelState = new ModelStateDictionary();
-
-            var errors = bookingId.Errors
-                .GroupBy(e => e.Code)
-                .ToDictionary(
-                    g => g.Key.ToLowerInvariant(),
-                    g => g.Select(e => e.Description).ToArray()
-                    );
-            
-            var validationProblem = new ValidationProblemDetails(modelState)
-            {
-                Type = "https://example.com/errors/validation",
-                Title = "Validation Error",
-                Status = 400,
-                Detail = "Please correct the specified errors and try again.",
-                Instance = HttpContext.Request.Path
-            };
-            
-            validationProblem.Extensions.Add("errors", bookingId.Errors);
-            
-            return BadRequest(validationProblem);
+            return _failureHandler.HandleFailure(result, HttpContext);
         }
         
-        return Ok(bookingId.Value);
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
@@ -125,9 +117,9 @@ public class BookingController : ControllerBase
     {
         var result = await _bookingService.Delete(id, cancellationToken);
 
-        if (result.Errors.Any())
+        if (result.IsFailure)
         {
-            return BadRequest(result.Errors);
+            return _failureHandler.HandleFailure(result, HttpContext);
         }
         
         return Ok(result.Value);

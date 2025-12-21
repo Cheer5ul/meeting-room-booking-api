@@ -1,3 +1,4 @@
+using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
 using RoomBooking.Application.Services;
@@ -39,15 +40,16 @@ builder.Host.UseSerilog();
 
 // builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 
-builder.Services.AddProblemDetails(configure =>
-{
-    configure.CustomizeProblemDetails = context =>
-    {
-        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-    };
-});
-builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+// builder.Services.AddProblemDetails(configure =>
+// {
+//     configure.CustomizeProblemDetails = context =>
+//     {
+//         context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+//     };
+// });
+
+// builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+// builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -63,6 +65,16 @@ builder.Services.AddScoped<IUserDeletionValidator,  UserDeletionValidator>();
 builder.Services.AddScoped<IBookingCreationValidator, BookingCreationValidator>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+
+try
+{
+    builder.Services.AddScoped<IFailureHandler, FailureHandler>();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"----------------Registration Error: {ex.Message}---------------");
+}
+
 
 builder.Services.AddSingleton(typeof(IServiceLogger<>), typeof(ServiceLogger<>));
 
@@ -102,7 +114,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseExceptionHandler();
+// app.UseExceptionHandler();
 
 // GlobalExceptionHandler is not middleware anymore, but it's an ExceptionHandler
 // app.UseMiddleware<GlobalExceptionHandler>();

@@ -4,7 +4,7 @@ using RoomBooking.Core.Results.Errors;
 
 namespace RoomBooking.API.FailureHandlers;
 
-public class FailureHandler
+public class FailureHandler : IFailureHandler
 {
     public ActionResult HandleFailure(Result result, HttpContext httpContext)
     {
@@ -27,13 +27,10 @@ public class FailureHandler
             Extensions = GetErrorExtensions(allErrors)!
         };
 
-        return new ObjectResult(problem)
-        {
-            StatusCode = statusCode
-        };
+        return new ObjectResult(problem);
     }
 
-    private IReadOnlyList<Error> GetAllErrors(Result result)
+    public IReadOnlyList<Error> GetAllErrors(Result result)
     {
         var errors = new List<Error>();
         
@@ -46,7 +43,7 @@ public class FailureHandler
         return errors;
     }
 
-    private int GetStatusCode(Result result)
+    public int GetStatusCode(Result result)
     {
         // if(result.Errors.Any())
         //     return StatusCodes.Status400BadRequest;
@@ -76,7 +73,7 @@ public class FailureHandler
         ["ValidationFailed"] = StatusCodes.Status400BadRequest,
     };
 
-    private string GetErrorType(Result result)
+    public string GetErrorType(Result result)
     {
         if(result.Errors.Any())
             return result.Errors.First().Code;
@@ -84,7 +81,7 @@ public class FailureHandler
         return result.Error?.Code ?? "unknown";
     }
 
-    private string GetErrorTitle(Result result)
+    public string GetErrorTitle(Result result)
     {
         if (result.Error?.Code is { Length: > 0 })
             return result.Error.Code;
@@ -92,10 +89,10 @@ public class FailureHandler
         if (result.Errors.Count == 1)
             return result.Errors[0].Code;
         
-        return "Multiple errors occured";
+        return "Multiple errors occurred";
     }
 
-    private string? GetErrorDetail(Result result)
+    public string? GetErrorDetail(Result result)
     {
         if (result.Error is not null && 
             result.Error.Description != string.Empty &&
@@ -108,27 +105,19 @@ public class FailureHandler
         return string.Join("; ", result.Errors.Select(e => e.Description));
     }
 
-    private Dictionary<string, object>? GetErrorExtensions(IReadOnlyList<Error> errors)
+    public Dictionary<string, object>? GetErrorExtensions(IReadOnlyList<Error> errors)
     {
         if (!errors.Any())
             return null;
         
         var extensions = new Dictionary<string, object>();
-
-        if (errors.Count > 1)
+        
+        extensions["errors"] = errors.Select(e => new
         {
-            extensions["errors"] = errors.Select(e => new
-            {
-                code = e.Code,
-                description = e.Description,
-            }).ToList();
-        }
+            code = e.Code,
+            description = e.Description,
+        }).ToList();
 
-        if (errors.Count == 1 ||
-            errors[0].Code != string.Empty)
-        {
-            extensions["error"] = errors[0].Code;
-        }
         
         return extensions.Any() ?  extensions : null;
     }
