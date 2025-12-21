@@ -43,10 +43,7 @@ public class FailureHandler : IFailureHandler
         return errors;
     }
 
-    public int GetStatusCode(Result result)
-    {
-        // if(result.Errors.Any())
-        //     return StatusCodes.Status400BadRequest;
+    public int GetStatusCode(Result result){
         
         var allErrors = GetAllErrors(result);
 
