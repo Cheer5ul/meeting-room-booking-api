@@ -61,8 +61,8 @@ public class UsersController : ControllerBase
         }
 
         var userId = await _userService.CreateUser(user, cancellationToken);
-        
-        return Ok(userId);
+
+        return CreatedAtAction(nameof(CreateUser), new { id = userId }, userId);
     }
 
     [HttpPut("{id:guid}")]

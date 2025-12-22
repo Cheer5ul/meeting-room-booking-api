@@ -1,5 +1,4 @@
 using RoomBooking.API.FailureHandlers;
-using RoomBooking.API.Middlewares;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
 using RoomBooking.Application.Services;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
@@ -11,34 +10,25 @@ using RoomBooking.DataAccess;
 using RoomBooking.DataAccess.DbContext;
 using Serilog;
 using Serilog.Events;
-using Serilog.Formatting.Compact;
-using Serilog.Formatting.Json;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File(new JsonFormatter(),
-        "serilog-file-.txt",
-        rollingInterval: RollingInterval.Day)
-    .MinimumLevel.Debug()
-    .CreateLogger();
+builder.Host.UseSerilog((context, services, configuration)
+    => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext());
 
-builder.Host.UseSerilog();
+builder.Services.AddProblemDetails(configure =>
+{
+    configure.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+    };
+});
 
-// builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
-
-// builder.Services.AddProblemDetails(configure =>
-// {
-//     configure.CustomizeProblemDetails = context =>
-//     {
-//         context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-//     };
-// });
-
-// builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
-// builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -55,22 +45,8 @@ builder.Services.AddScoped<IBookingCreationValidator, BookingCreationValidator>(
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 
-try
-{
-    builder.Services.AddScoped<IFailureHandler, FailureHandler>();
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"----------------Registration Error: {ex.Message}---------------");
-}
-
-
-builder.Services.AddSingleton(typeof(IServiceLogger<>), typeof(ServiceLogger<>));
-
-// builder.Services.AddProblemDetails();
-
-// old version
-//builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+ builder.Services.AddScoped<IFailureHandler, FailureHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -99,16 +75,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    options.GetLevel = (httpContext, elapsed, ex) =>
+        ex != null ? LogEventLevel.Error :
+        httpContext.Response.StatusCode > 499 ? LogEventLevel.Error :
+        LogEventLevel.Information;
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-// app.UseExceptionHandler();
-
-// GlobalExceptionHandler is not middleware anymore, but it's an ExceptionHandler
-// app.UseMiddleware<GlobalExceptionHandler>();
+app.UseExceptionHandler();
 
 app.MapControllers();
 
-app.Logger.LogInformation("------------------RoomBooking API has been started-------------------");
+logger.LogInformation("---------------------------RoomBooking API started---------------------------");
 app.Run();

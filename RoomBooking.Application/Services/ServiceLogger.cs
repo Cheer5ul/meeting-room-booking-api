@@ -21,7 +21,7 @@ public class ServiceLogger<T> : IServiceLogger<T>
         var count = collection.Count();
         var entityType = entityName ?? typeof(TItem).Name;
         
-        if (count == 0 )
+        if (count == 0)
         {
             _logger.LogWarning("{Service}.{Method}: No {Entity} found",
                 serviceName,

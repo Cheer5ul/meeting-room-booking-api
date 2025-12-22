@@ -1,0 +1,55 @@
+{"@t":"2025-12-22T17:29:54.9142038Z","@mt":"---------------------------RoomBooking API started---------------------------","SourceContext":"Program","Application":"RoomBooking.API","Environment":"Production"}
+{"@t":"2025-12-22T17:30:02.5183438Z","@mt":"Failed to determine the https port for redirect.","@l":"Warning","@tr":"51ec9ee1129c67626b2b4f11980054d0","@sp":"1302b9eea6aac598","EventId":{"Id":3,"Name":"FailedToDeterminePort"},"SourceContext":"Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware","RequestId":"0HNI1FUUJF09R:00000001","RequestPath":"/api/rooms","ConnectionId":"0HNI1FUUJF09R","Application":"RoomBooking.API","Environment":"Production"}
+{"@t":"2025-12-22T17:30:02.9383087Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["422.7730"],"@tr":"51ec9ee1129c67626b2b4f11980054d0","@sp":"1302b9eea6aac598","RequestMethod":"GET","RequestPath":"/api/rooms","StatusCode":200,"Elapsed":422.773,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HNI1FUUJF09R:00000001","ConnectionId":"0HNI1FUUJF09R","Application":"RoomBooking.API","Environment":"Production"}
+{"@t":"2025-12-22T17:30:08.4378764Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["41.5574"],"@tr":"39ccaac6bf6f653fd01adc200a8e5e50","@sp":"def19793267243c0","RequestMethod":"POST","RequestPath":"/api/rooms","StatusCode":400,"Elapsed":41.5574,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HNI1FUUJF09R:00000002","ConnectionId":"0HNI1FUUJF09R","Application":"RoomBooking.API","Environment":"Production"}
+{"@t":"2025-12-22T17:30:21.7499433Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["32.5650"],"@tr":"ee4577037c8e276cf6e7b25f6f817997","@sp":"80c136b723b2ac4f","RequestMethod":"GET","RequestPath":"/api/users","StatusCode":200,"Elapsed":32.565,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HNI1FUUJF09S:00000001","ConnectionId":"0HNI1FUUJF09S","Application":"RoomBooking.API","Environment":"Production"}
+
+{
+  "@t":"2025-12-22T17:30:48.1475629Z",
+  "@mt":"{@MethodName}: Creating new user. Name: {@UserName}, Email: {@UserEmail}",
+  "@tr":"d0ab844e06b0dbfbb03a703f1e7ffb7c",
+  "@sp":"c5dda0e465fb96f3",
+  "MethodName":"CreateUser",
+  "UserName":"string",
+  "UserEmail":"string",
+  "SourceContext":"RoomBooking.Application.Services.UserService",
+  "ActionId":"071b14b9-6b16-4f97-a4ed-f4b9e8c19d4e",
+  "ActionName":"RoomBooking.API.Controllers.UsersController.CreateUser (RoomBooking.API)",
+  "RequestId":"0HNI1FUUJF09S:00000002",
+  "RequestPath":"/api/users",
+  "ConnectionId":"0HNI1FUUJF09S",
+  "Application":"RoomBooking.API",
+  "Environment":"Production",
+}
+{
+  "@t":"2025-12-22T17:30:48.3112416Z",
+  "@mt":"{@MethodName}: User created successfully: UserId: {@UserId}",
+  "@tr":"d0ab844e06b0dbfbb03a703f1e7ffb7c",
+  "@sp":"c5dda0e465fb96f3",
+  "MethodName":"CreateUser",
+  "UserId":"64c7c62e-67d2-42a1-8998-8544ac9741f5",
+  "SourceContext":"RoomBooking.Application.Services.UserService",
+  "ActionId":"071b14b9-6b16-4f97-a4ed-f4b9e8c19d4e",
+  "ActionName":"RoomBooking.API.Controllers.UsersController.CreateUser (RoomBooking.API)",
+  "RequestId":"0HNI1FUUJF09S:00000002",
+  "RequestPath":"/api/users",
+  "ConnectionId":"0HNI1FUUJF09S",
+  "Application":"RoomBooking.API",
+  "Environment":"Production"
+}
+{
+  "@t":"2025-12-22T17:30:48.3357694Z",
+  "@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms",
+  "@r":["195.9511"],
+  "@tr":"d0ab844e06b0dbfbb03a703f1e7ffb7c",
+  "@sp":"c5dda0e465fb96f3",
+  "RequestMethod":"POST",
+  "RequestPath":"/api/users",
+  "StatusCode":201,
+  "Elapsed":195.9511,
+  "SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware",
+  "RequestId":"0HNI1FUUJF09S:00000002",
+  "ConnectionId":"0HNI1FUUJF09S",
+  "Application":"RoomBooking.API",
+  "Environment":"Production"
+}

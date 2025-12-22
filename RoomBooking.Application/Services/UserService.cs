@@ -1,10 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using RoomBooking.Application.Validations.Abstractions.Users;
-using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
-using RoomBooking.Application.Services;
 using RoomBooking.Core.Models;
 
 
@@ -13,62 +10,84 @@ namespace RoomBooking.Application.Services;
 public class UserService(
     IUserRepository userRepository, 
     IUserDeletionValidator deletionValidator,
-    IServiceLogger<User> logger) : IUserService
+    ILogger<UserService> logger) : IUserService
 {
-    private const string ServiceName = nameof(UserService);
     public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var result = await userRepository.Get(cancellationToken);
-            logger.LogResultCollection(result, ServiceName, nameof(GetAllUsers));
-            return result;
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, ServiceName, nameof(GetAllUsers));
-            throw;
-        }
-        
+        return await userRepository.Get(cancellationToken);
     }
 
     public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken = default)
     {
-        try
+        logger.LogDebug("{@MethodName}: Getting user by id: {@UserId}", nameof(GetUserById), id);
+        var user =  await userRepository.GetById(id, cancellationToken);
+
+        if (user == null)
         {
-            var result =  await userRepository.GetById(id, cancellationToken);
-            logger.LogResult(result, ServiceName, nameof(GetUserById));
-            return result;
+            logger.LogWarning("User not found: {@UserId}", id);
         }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, ServiceName, nameof(GetAllUsers));
-            throw;
-        }
+        return user;
     }
 
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken = default)
     {
-        return await userRepository.Create(user, cancellationToken);
+        logger.LogInformation("{@MethodName}: Creating new user. Name: {@UserName}, Email: {@UserEmail}",
+            nameof(CreateUser), user.Name, user.Email);
+
+        try
+        {
+           var userId = await userRepository.Create(user, cancellationToken);
+           
+           logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}", 
+               nameof(CreateUser), userId);
+           
+           return userId;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{@MethodName}: Error creating user: {@UserName}, Email: {@UserEmail}", 
+                nameof(CreateUser),
+                user.Name,
+                user.Email);
+            throw;
+        }
     }
 
     public async Task<Guid> UpdateUser(Guid id, string name, string email, string department, 
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("{@MethodName}: Updating user {@UserId}. New values - Name: {@UserName}, Department: {@Department}", 
+            nameof(UpdateUser), id, name, department);
+        
         return await userRepository.Update(id, name, email, department, cancellationToken);
     }
 
     public async Task<Guid> DeleteUser(Guid id, CancellationToken cancellationToken = default)
     {
-        var validator = await deletionValidator.IsUserExists(id, cancellationToken);
+        logger.LogInformation("{@MethodName}: Attempting to delete user {@UserId}",
+            nameof(DeleteUser), id);
+        var canDelete = await deletionValidator.IsUserExists(id, cancellationToken);
 
-        if (!validator)
+        if (!canDelete)
         {
-            //throwing exception for custom error middleware handler check, should use result pattern or error array
+            logger.LogWarning("{@MethodName}: Cannot delete unexisting user: {@UserId}",
+                nameof(DeleteUser), id);
             throw new Exception("User does not exist");
         }
-        
-        return await userRepository.Delete(id, cancellationToken);
+
+        try
+        {
+            var deletedId = await userRepository.Delete(id, cancellationToken);
+            logger.LogInformation("{@MethodName}: User was successfully deleted: {@UserId}",
+                nameof(DeleteUser), deletedId);
+            return deletedId;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{@MethodName}: Error deleting user: {@UserId}",
+                nameof(DeleteUser),id);
+            throw;
+        }
     }
     
 }
