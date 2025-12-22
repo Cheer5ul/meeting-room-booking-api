@@ -158,3 +158,5 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.Ide
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222_001.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222_002.json

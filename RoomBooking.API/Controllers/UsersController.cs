@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using RoomBooking.API.Contracts.UserContracts;
+using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;
 
 namespace RoomBooking.API.Controllers;
@@ -9,17 +11,26 @@ namespace RoomBooking.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
-    public UsersController(IUserService userService)
+    private readonly IFailureHandler _failureHandler;
+    public UsersController(IUserService userService, IFailureHandler failureHandler)
     {
-        _userService = userService;        
+        _userService = userService;
+        _failureHandler = failureHandler;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
     {
-        var users = await _userService.GetAllUsers(cancellationToken);
+        var result = await _userService.GetAllUsers(cancellationToken);
 
-        var response = users.Select(u => new UserResponse(
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulUsers = result.Value!;
+        
+        var response = successfulUsers.Select(u => new UserResponse(
             u.Id,
             u.Name,
             u.Email,
@@ -31,16 +42,22 @@ public class UsersController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<UserResponse>> GetUserById(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetUserById(id, cancellationToken);
         
-        if (user == null)
-            return NotFound();
+        var result = await _userService.GetUserById(id, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            //needs test
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+        
+        var successfulUser = result.Value!;
         
         var response = new UserResponse(
-            user.Id,
-            user.Name,
-            user.Email,
-            user.Department);
+            successfulUser.Id,
+            successfulUser.Name,
+            successfulUser.Email,
+            successfulUser.Department);
         
         return Ok(response);
     }
@@ -60,29 +77,58 @@ public class UsersController : ControllerBase
             return BadRequest(error);
         }
 
-        var userId = await _userService.CreateUser(user, cancellationToken);
+        var result = await _userService.CreateUser(user, cancellationToken);
 
-        return CreatedAtAction(nameof(CreateUser), new { id = userId }, userId);
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulUser = result.Value;
+
+        return Ok(successfulUser);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<Guid>> UpdateUser(Guid id, [FromBody] UserRequest userRequest, CancellationToken cancellationToken)
     {
         
-        var userId = await _userService.UpdateUser(
+        var result = await _userService.UpdateUser(
             id,
             userRequest.Name,
             userRequest.Email,
             userRequest.Department,
             cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulUser = result.Value!;
+
+        //Not returning id
+        var rowsAffected = Enumerable
+            .Range(0, successfulUser.Length)
+            .Where(i => successfulUser[i]?.GetType() != typeof(Guid))
+            .Select(i => successfulUser[i]?.ToString())
+            .ToList();
         
-        return Ok(userId);
+        return Ok(rowsAffected);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<Guid>> DeleteUser(Guid id, CancellationToken cancellationToken)
     {
-        var userId = await _userService.DeleteUser(id, cancellationToken);
-        return Ok(userId);
+        var result = await _userService.DeleteUser(id, cancellationToken);
+        
+        if (result.IsFailure)
+        {
+            _failureHandler.HandleFailure(result, HttpContext);
+        }
+        
+        var successfulUser = result.Value;
+        
+        return Ok(successfulUser);
     }
 }

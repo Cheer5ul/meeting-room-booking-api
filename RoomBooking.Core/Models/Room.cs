@@ -1,4 +1,4 @@
-﻿namespace RoomBooking.Core;
+﻿namespace RoomBooking.Core.Models;
 
 public class Room
 {

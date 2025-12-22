@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoomBooking.API.Contracts.RoomContracts;
+using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Services;
+using RoomBooking.Core.Models;
 
 namespace RoomBooking.API.Controllers;
 
@@ -10,18 +12,27 @@ namespace RoomBooking.API.Controllers;
 public class RoomController : ControllerBase
 {
     private readonly IRoomService _roomService;
+    private readonly IFailureHandler _failureHandler;
 
-    public RoomController(IRoomService roomService)
+    public RoomController(IRoomService roomService, IFailureHandler failureHandler)
     {
         _roomService = roomService;
+        _failureHandler = failureHandler;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<RoomResponse>>> GetAllRooms(CancellationToken cancellationToken)
     {
-        var rooms = await _roomService.GetAllRooms(cancellationToken);
+        var result = await _roomService.GetAllRooms(cancellationToken);
 
-        var response = rooms.Select(r => new RoomResponse(
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+        
+        var successfulRooms = result.Value!;
+        
+        var response = successfulRooms.Select(r => new RoomResponse(
             r.Id,
             r.Name,
             r.Capacity,
@@ -35,18 +46,22 @@ public class RoomController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<RoomResponse>> GetRoomById(Guid id, CancellationToken cancellationToken)
     {
-        var room = await _roomService.GetRoomById(id, cancellationToken);
+        var result = await _roomService.GetRoomById(id, cancellationToken);
 
-        if (room == null)
-            return NotFound();
+        if (result.IsFailure)
+        {
+            return  _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulRoom = result.Value!;
         
         var response = new RoomResponse(
-            room.Id,
-            room.Name,
-            room.Capacity,
-            room.HasProjector,
-            room.HasTv,
-            room.HasWhiteBoard);
+            successfulRoom.Id,
+            successfulRoom.Name,
+            successfulRoom.Capacity,
+            successfulRoom.HasProjector,
+            successfulRoom.HasTv,
+            successfulRoom.HasWhiteBoard);
 
         return Ok(response);
     }
@@ -64,20 +79,27 @@ public class RoomController : ControllerBase
             roomRequest.HasWhiteBoard);
 
         if (!string.IsNullOrEmpty(error))
-        {
+        {//think over a better way and logging
             return BadRequest(error);
         }
         
-        var roomId = await _roomService.CreateRoom(room, cancellationToken);
+        var result = await _roomService.CreateRoom(room, cancellationToken);
 
-        return Ok(roomId);
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulRoom = result.Value!;
+        
+        return Ok(successfulRoom);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<Guid>> UpdateRoom(Guid id, [FromBody] RoomRequest roomRequest,
         CancellationToken cancellationToken)
     {
-        var roomId = await _roomService.UpdateRoom(
+        var result = await _roomService.UpdateRoom(
             id, 
             roomRequest.Name, 
             roomRequest.Capacity,
@@ -85,16 +107,37 @@ public class RoomController : ControllerBase
             roomRequest.HasTv,
             roomRequest.HasWhiteBoard,
             cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulRoom = result.Value!;
         
-        return Ok(roomId);
+        //Not returning id
+        var rowsAffected = Enumerable
+            .Range(0, successfulRoom.Length)
+            .Where(i => successfulRoom[i]?.GetType() != typeof(Guid))
+            .Select(i => successfulRoom[i]?.ToString())
+            .ToList();
+        
+        return Ok(rowsAffected);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<Guid>> DeleteRoom(Guid id, CancellationToken cancellationToken)
     {
-        var roomId = await _roomService.DeleteRoom(id, cancellationToken);
+        var result = await _roomService.DeleteRoom(id, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulRoom = result.Value!;
         
-        return Ok(roomId);
+        return Ok(successfulRoom);
     }
 
 }

@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RoomBooking.Core;
-using RoomBooking.Core.Abstractions;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.DbContext;
@@ -74,17 +73,16 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
         
         return userEntity.Id;
     }
-
-    public async Task<Guid> Update(Guid id, string name, string email, string department, 
+    public async Task<ITuple> Update(Guid id, string name, string email, string department, 
         CancellationToken cancellationToken = default)
     {
-        await dbContext.Users.Where(u => u.Id == id)
+       await dbContext.Users.Where(u => u.Id == id)
             .ExecuteUpdateAsync(u => u
                 .SetProperty(y => y.Name, name)
                 .SetProperty(y => y.Email, email)
                 .SetProperty(y => y.Department, department), cancellationToken);
-        
-        return id;
+       
+        return (id, name, email, department);
     }
 
     public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default)

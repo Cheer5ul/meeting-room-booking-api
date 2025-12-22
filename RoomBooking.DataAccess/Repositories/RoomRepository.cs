@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RoomBooking.Core;
-using RoomBooking.Core.Abstractions;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using RoomBooking.Core.Abstractions.Repositories;
+using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.DbContext;
 using RoomBooking.DataAccess.Entities;
 
@@ -68,7 +68,7 @@ public class RoomRepository(RoomBookingDbContext dbContext) : IRoomRepository
         return roomEntity.Id;
     }
 
-    public async Task<Guid> Update(Guid id, string name, int capacity, bool hasProjector,
+    public async Task<ITuple> Update(Guid id, string name, int capacity, bool hasProjector,
         bool hasTv, bool hasWhiteBoard, CancellationToken cancellationToken = default)
     {
         await dbContext.Rooms.Where(r => r.Id == id)
@@ -78,7 +78,8 @@ public class RoomRepository(RoomBookingDbContext dbContext) : IRoomRepository
                 .SetProperty(p => p.HasProjector, hasProjector)
                 .SetProperty(p => p.HasTv, hasTv)
                 .SetProperty(p => p.HasWhiteBoard, hasWhiteBoard), cancellationToken);
-        return id;
+        
+        return (id,  name, capacity, hasProjector, hasTv, hasWhiteBoard);
     }
 
     public async Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default)

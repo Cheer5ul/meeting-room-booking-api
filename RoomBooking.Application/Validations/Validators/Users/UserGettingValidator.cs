@@ -3,11 +3,11 @@ using RoomBooking.Core.Abstractions.Repositories;
 
 namespace RoomBooking.Application.Validations.Validators.Users;
 
-public class UserDeletionValidator : IUserDeletionValidator
+public class UserGettingValidator : IUserGettingValidator
 {
     private readonly IUserRepository _userRepository;
     
-    public UserDeletionValidator(IUserRepository userRepository)
+    public UserGettingValidator(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }

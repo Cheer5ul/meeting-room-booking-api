@@ -1,4 +1,5 @@
-﻿using RoomBooking.Core.Models;
+﻿using System.Runtime.CompilerServices;
+using RoomBooking.Core.Models;
 
 namespace RoomBooking.Core.Abstractions.Repositories;
 
@@ -8,7 +9,7 @@ public interface IUserRepository
     Task<User?> GetById(Guid id, CancellationToken cancellationToken = default);
     Task<Guid> Create(User user, CancellationToken cancellationToken = default);
 
-    Task<Guid> Update(Guid id, string name, string email, string department, 
+    Task<ITuple> Update(Guid id, string name, string email, string department, 
         CancellationToken cancellationToken = default);
 
     Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default);

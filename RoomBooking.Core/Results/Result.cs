@@ -21,7 +21,7 @@ public class Result
     public List<Error> Errors { get; }
     
     public static Result Success() => new(true, []); //calls constructor, passes success value and empty error
-    public static Result MultipleFailures(List<Error> errors) => new(false, errors);
+    public static Result Failures(List<Error> errors) => new(false, errors);
 }
 
 public class Result<T> : Result
@@ -39,6 +39,6 @@ public class Result<T> : Result
 
    public static Result<T> Success(T value) => new(value);
    //'new' hides inherited method Result.Failure and creates a new one
-   public new static Result<T> MultipleFailures(List<Error> errors) => new(errors);
+   public new static Result<T> Failures(List<Error> errors) => new(errors);
    
 }

@@ -2,8 +2,10 @@ using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
 using RoomBooking.Application.Services;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
+using RoomBooking.Application.Validations.Abstractions.Rooms;
 using RoomBooking.Application.Validations.Abstractions.Users;
 using RoomBooking.Application.Validations.Validators.Bookings;
+using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Application.Validations.Validators.Users;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.DataAccess;
@@ -40,10 +42,13 @@ builder.Services.AddPersistence(builder.Configuration);
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserDeletionValidator,  UserDeletionValidator>();
+builder.Services.AddScoped<IUserGettingValidator,  UserGettingValidator>();
+
 builder.Services.AddScoped<IBookingCreationValidator, BookingCreationValidator>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomGettingValidator, RoomGettingValidator>();
 
  builder.Services.AddScoped<IFailureHandler, FailureHandler>();
 builder.Services.AddProblemDetails();
