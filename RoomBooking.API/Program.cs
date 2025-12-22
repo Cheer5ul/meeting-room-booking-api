@@ -12,27 +12,17 @@ using RoomBooking.DataAccess.DbContext;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
-    // .MinimumLevel.Information()
-    // .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-    // .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning) // stop showing sql
-    // .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    // .MinimumLevel.Override("System", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    // .Enrich.WithProperty("Application", "RoomBooking.API")
-    .WriteTo.Console(
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .WriteTo.File(
-        new RenderedCompactJsonFormatter(),
-        path: "logs/serilog-file.txt",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30, //Saving only for 30 days
-        fileSizeLimitBytes: 10_485_760,
-        rollOnFileSizeLimit: true) //Maximun 10 mb
+    .WriteTo.Console()
+    .WriteTo.File(new JsonFormatter(),
+        "serilog-file-.txt",
+        rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Debug()
     .CreateLogger();
 
 builder.Host.UseSerilog();

@@ -34,9 +34,6 @@ public class FailureHandler : IFailureHandler
     {
         var errors = new List<Error>();
         
-        if(result.Error != null && result.Error != Error.None)
-            errors.Add(result.Error);
-        
         if(result.Errors.Any())
             errors.AddRange(result.Errors);
 
@@ -75,14 +72,11 @@ public class FailureHandler : IFailureHandler
         if(result.Errors.Any())
             return result.Errors.First().Code;
         
-        return result.Error?.Code ?? "unknown";
+        return "unknown";
     }
 
     public string GetErrorTitle(Result result)
     {
-        if (result.Error?.Code is { Length: > 0 })
-            return result.Error.Code;
-
         if (result.Errors.Count == 1)
             return result.Errors[0].Code;
         
@@ -91,10 +85,6 @@ public class FailureHandler : IFailureHandler
 
     public string? GetErrorDetail(Result result)
     {
-        if (result.Error is not null && 
-            result.Error.Description != string.Empty &&
-            !string.IsNullOrEmpty(result.Error?.Description))
-            return result.Error.Description;
         
         if (result.Errors.Count == 1)
             return result.Errors[0].Description;

@@ -44,7 +44,7 @@ public class BookingService(IBookingRepository repository, IBookingCreationValid
         
         if (!wasDeleted)
         {
-            return Result<Guid>.Failure(BookingErrors.NotFound);
+            return Result<Guid>.MultipleFailures([BookingErrors.NotFound]);
         }
 
         return id;
