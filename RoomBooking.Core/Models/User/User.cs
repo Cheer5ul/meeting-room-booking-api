@@ -1,4 +1,4 @@
-﻿namespace RoomBooking.Core.Models;
+﻿namespace RoomBooking.Core.Models.User;
 
 public class User
 {
@@ -11,11 +11,13 @@ public class User
         Bookings = bookings ?? [];
     }
     public Guid Id { get; }
-    public string Name { get; } = string.Empty;
-    public string Email { get; } = string.Empty;
-    public string Department { get; } = string.Empty;
+    public string Name { get; }
+    public string Email { get; } 
+    public string Department { get; }
     
-    public List<Booking> Bookings { get; set; } = [];
+    public AddressInfo? AddressInfo { get; private set;}
+    
+    public List<Booking> Bookings { get; set; }
 
     public static (User user, string? error) Create
         (Guid id, string name, string email, string department, List<Booking>? bookings = default(List<Booking>))
@@ -34,5 +36,17 @@ public class User
         );
         
         return (user, error);
+    }
+
+    public AddressInfo AddAddressInfo
+    ( string street, string city, string state, string postalCode,
+        string country)
+    {
+        var addressInfo = AddressInfo.Create(
+             street, city, state, postalCode, country);
+
+        AddressInfo = addressInfo;
+        
+        return addressInfo;
     }
 }

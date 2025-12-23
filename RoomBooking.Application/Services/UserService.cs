@@ -4,6 +4,7 @@ using RoomBooking.Application.Validations.Abstractions.Users;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.User;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 
@@ -93,5 +94,18 @@ public class UserService(
         logger.LogInformation("{@MethodName}: User was successfully deleted: {@UserId}",
             nameof(DeleteUser), deletedId);
         return deletedId;
+    }
+
+    public async Task<Result<ITuple>> AddAddressInfo(
+        Guid id, string street, string city, string state, string postalCode, string country,
+        CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation("{@MethodName}: Attempting to add AddressInfo for user {@UserId}",
+            nameof(AddAddressInfo), id);
+
+        var addedInfo = await userRepository.AddAddressInfo(
+            id, street, city, state, postalCode, country, cancellationToken);
+
+        return Result<ITuple>.Success(addedInfo);
     }
 }

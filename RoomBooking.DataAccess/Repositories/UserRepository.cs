@@ -1,9 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Globalization;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using RoomBooking.Core.Abstractions.Repositories;
-using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.User;
 using RoomBooking.DataAccess.DbContext;
-using RoomBooking.DataAccess.Entities;
+using RoomBooking.DataAccess.Entities.UserEntity;
+using RoomBooking.DataAccess.Exceptions;
 
 namespace RoomBooking.DataAccess.Repositories;
 
@@ -91,5 +93,30 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
             .ExecuteDeleteAsync(cancellationToken);
         
         return id;
+    }
+    
+    public async Task<ITuple> AddAddressInfo(
+        Guid id, string street, string city, string state, string postalCode, string country, 
+        CancellationToken cancellationToken = default)
+    {
+        var userEntity = await dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+        if (userEntity == null)
+            throw new NotFoundException($"User with id {id} not found");
+
+        userEntity.AddressInfo = new AddressInfoEntity()
+        {
+            Street = street,
+            City = city,
+            State = state,
+            PostalCode = postalCode,
+            Country = country
+        };
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        
+        return (street, city, state, postalCode, country);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RoomBooking.DataAccess.Entities;
+using RoomBooking.DataAccess.Entities.RoomEntity;
 
 namespace RoomBooking.DataAccess.Configurations;
 
@@ -18,7 +19,8 @@ public class RoomConfiguration : IEntityTypeConfiguration<RoomEntity>
         
         
         builder.Property(x => x.Name)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(100);
         
         builder.Property(x => x.Capacity)
             .IsRequired();

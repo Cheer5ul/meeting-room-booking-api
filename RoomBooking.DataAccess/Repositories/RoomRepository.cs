@@ -4,6 +4,7 @@ using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models;
 using RoomBooking.DataAccess.DbContext;
 using RoomBooking.DataAccess.Entities;
+using RoomBooking.DataAccess.Entities.RoomEntity;
 
 namespace RoomBooking.DataAccess.Repositories;
 

@@ -9,12 +9,12 @@ namespace RoomBooking.API.Controllers;
 
 [ApiController]
 [Route("api/rooms")]
-public class RoomController : ControllerBase
+public class RoomsController : ControllerBase
 {
     private readonly IRoomService _roomService;
     private readonly IFailureHandler _failureHandler;
 
-    public RoomController(IRoomService roomService, IFailureHandler failureHandler)
+    public RoomsController(IRoomService roomService, IFailureHandler failureHandler)
     {
         _roomService = roomService;
         _failureHandler = failureHandler;

@@ -1,6 +1,6 @@
 ﻿
 
-namespace RoomBooking.DataAccess.Entities;
+namespace RoomBooking.DataAccess.Entities.UserEntity;
 
 public class UserEntity
 {
@@ -9,6 +9,8 @@ public class UserEntity
     public string Email { get; set; } = string.Empty;
     public string Department { get; set; } = string.Empty;
     
-    public List<BookingEntity> Bookings { get; set; } = [];
+    public List<BookingEntity.BookingEntity> Bookings { get; set; } = [];
+    
+    public AddressInfoEntity? AddressInfo { get; set;}
     
 }

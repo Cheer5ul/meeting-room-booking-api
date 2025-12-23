@@ -3,4 +3,5 @@
 public record UserRequest(
     string Name,
     string Email,
-    string Department);
+    string Department
+ );

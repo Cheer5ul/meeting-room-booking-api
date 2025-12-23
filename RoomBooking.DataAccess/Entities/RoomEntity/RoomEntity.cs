@@ -1,4 +1,4 @@
-﻿namespace RoomBooking.DataAccess.Entities;
+﻿namespace RoomBooking.DataAccess.Entities.RoomEntity;
 
 public class RoomEntity
 {
@@ -9,5 +9,5 @@ public class RoomEntity
     public bool HasTv { get; set;}
     public bool HasWhiteBoard { get; set;}
     
-    public List<BookingEntity> Bookings { get; set;} = [];
+    public List<BookingEntity.BookingEntity> Bookings { get; set;} = [];
 }

@@ -1,4 +1,4 @@
-﻿namespace RoomBooking.DataAccess.Entities;
+﻿namespace RoomBooking.DataAccess.Entities.BookingEntity;
 
 public class BookingEntity
 {
@@ -8,8 +8,8 @@ public class BookingEntity
     public string? Purpose { get; set; }
     
     public Guid UserId { get; set; }
-    public UserEntity? User { get; set; }       
+    public UserEntity.UserEntity? User { get; set; }       
     
     public Guid RoomId { get; set; }
-    public RoomEntity? Room { get; set; }
+    public RoomEntity.RoomEntity? Room { get; set; }
 }

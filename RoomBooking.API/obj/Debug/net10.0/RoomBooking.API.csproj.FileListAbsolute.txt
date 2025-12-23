@@ -151,12 +151,4 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Setti
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Console.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.File.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\MediatR.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\MediatR.Contracts.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.JsonWebTokens.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222.json
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222_001.json
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251222_002.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20251223.json

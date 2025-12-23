@@ -1,3 +1,4 @@
+using FluentValidation;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
 using RoomBooking.Application.Services;
@@ -14,6 +15,8 @@ using Serilog;
 using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 builder.Host.UseSerilog((context, services, configuration)
     => configuration

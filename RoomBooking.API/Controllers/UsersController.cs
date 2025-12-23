@@ -62,11 +62,11 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost]
+    [HttpPost("create-user")]
     public async Task<ActionResult<Guid>> CreateUser([FromBody] UserRequest userRequest,
         CancellationToken cancellationToken)
     {
-        var (user, error) = Core.Models.User.Create(
+        var (user, error) = Core.Models.User.User.Create(
             Guid.NewGuid(),
              userRequest.Name,
              userRequest.Email,
@@ -124,11 +124,41 @@ public class UsersController : ControllerBase
         
         if (result.IsFailure)
         {
-            _failureHandler.HandleFailure(result, HttpContext);
+            return _failureHandler.HandleFailure(result, HttpContext);
         }
         
         var successfulUser = result.Value;
         
         return Ok(successfulUser);
+    }
+
+    [HttpPost("add-user-address")]
+    public async Task<ActionResult<Guid>> AddUserAddressInfo(Guid id, [FromBody] UserAddressInfoRequest addressInfoRequest,
+        CancellationToken cancellationToken)
+    {
+        var result = await _userService.AddAddressInfo(
+            id,
+            addressInfoRequest.street,
+            addressInfoRequest.city,
+            addressInfoRequest.state,
+            addressInfoRequest.postalCode,
+            addressInfoRequest.country,
+            cancellationToken);
+        
+
+        if (result.IsFailure)
+        {
+            return _failureHandler.HandleFailure(result, HttpContext);
+        }
+
+        var successfulUser = result.Value!;
+
+        var affectedRows = Enumerable
+            .Range(0, successfulUser.Length)
+            .Where(i => successfulUser[i]?.GetType() != typeof(Guid))
+            .Select(i => successfulUser[i]?.ToString())
+            .ToList();
+        
+        return Ok(affectedRows);
     }
 }

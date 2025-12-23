@@ -22,7 +22,7 @@ namespace RoomBooking.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.BookingEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.BookingEntity.BookingEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace RoomBooking.DataAccess.Migrations
                     b.ToTable("Bookings", (string)null);
                 });
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.RoomEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.RoomEntity.RoomEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,14 +73,15 @@ namespace RoomBooking.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.UserEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.UserEntity.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,30 +89,33 @@ namespace RoomBooking.DataAccess.Migrations
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.BookingEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.BookingEntity.BookingEntity", b =>
                 {
-                    b.HasOne("RoomBooking.DataAccess.Entities.RoomEntity", "Room")
+                    b.HasOne("RoomBooking.DataAccess.Entities.RoomEntity.RoomEntity", "Room")
                         .WithMany("Bookings")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RoomBooking.DataAccess.Entities.UserEntity", "User")
+                    b.HasOne("RoomBooking.DataAccess.Entities.UserEntity.UserEntity", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -122,12 +126,55 @@ namespace RoomBooking.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.RoomEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.UserEntity.UserEntity", b =>
+                {
+                    b.OwnsOne("RoomBooking.DataAccess.Entities.UserEntity.AddressInfoEntity", "AddressInfo", b1 =>
+                        {
+                            b1.Property<Guid>("UserEntityId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("character varying(20)");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.HasKey("UserEntityId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserEntityId");
+                        });
+
+                    b.Navigation("AddressInfo");
+                });
+
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.RoomEntity.RoomEntity", b =>
                 {
                     b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("RoomBooking.DataAccess.Entities.UserEntity", b =>
+            modelBuilder.Entity("RoomBooking.DataAccess.Entities.UserEntity.UserEntity", b =>
                 {
                     b.Navigation("Bookings");
                 });

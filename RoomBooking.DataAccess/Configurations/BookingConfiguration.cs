@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RoomBooking.DataAccess.Entities;
+using RoomBooking.DataAccess.Entities.BookingEntity;
 
 namespace RoomBooking.DataAccess.Configurations;
 

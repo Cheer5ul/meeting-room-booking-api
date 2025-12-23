@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.User;
 
 namespace RoomBooking.Core.Abstractions.Repositories;
 
@@ -13,4 +14,8 @@ public interface IUserRepository
         CancellationToken cancellationToken = default);
 
     Task<Guid> Delete(Guid id, CancellationToken cancellationToken = default);
+
+    Task<ITuple> AddAddressInfo(
+        Guid id, string street, string city, string state, string postalCode, string country,
+        CancellationToken cancellationToken = default);
 }
