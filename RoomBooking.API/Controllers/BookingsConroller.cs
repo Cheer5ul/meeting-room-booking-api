@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;

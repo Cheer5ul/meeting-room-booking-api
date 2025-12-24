@@ -104,7 +104,8 @@ public sealed class BookingValidator : AbstractValidator<Booking>
 
     private bool StartsNotTooLate(DateTime startTime)
     {
-        var maxFutureBooking = DateTime.UtcNow + _maxDuration; 
+        //use utc
+        var maxFutureBooking = DateTime.Now + _maxFutureBooking;
         
         return startTime < maxFutureBooking;
     }
