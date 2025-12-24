@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.API.FailureHandlers;
@@ -14,7 +15,9 @@ public class BookingController : ControllerBase
 {
     private readonly IBookingService _bookingService;
     private readonly IFailureHandler _failureHandler;
-    public BookingController(IBookingService bookingService, IFailureHandler failureHandler)
+    public BookingController(
+        IBookingService bookingService, 
+        IFailureHandler failureHandler)
     {
         _bookingService = bookingService;
         _failureHandler = failureHandler;

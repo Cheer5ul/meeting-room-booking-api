@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
@@ -10,7 +11,7 @@ namespace RoomBooking.Application.Services;
 
 public class BookingService(
     IBookingRepository repository,
-    IBookingCreationValidator validator,
+    IValidator<Booking> validator,
     ILogger<BookingService> logger) : IBookingService
 {
     public async Task<Result<List<Booking>>> GetAllBookings(CancellationToken cancellationToken = default)
@@ -37,12 +38,26 @@ public class BookingService(
     public async Task<Result<Guid>> Create(Booking booking, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Creating booking: {@Booking}", nameof(Create), booking);
-        var errors = await validator.Validate(booking, cancellationToken);
+        // var errors = await validator.Validate(booking, cancellationToken);
+        var validationResult = await validator.ValidateAsync(booking, cancellationToken);
         
-        if (errors.Any())
+        if (!validationResult.IsValid)
         {
             logger.LogInformation("{@MethodName}: Validation errors occured while creating booking: {@Errors}",
-                nameof(Create), errors);
+                nameof(Create), validationResult.Errors);
+
+            var errorsDictionary = validationResult.Errors
+                .GroupBy(e => e.ErrorCode)
+                .ToDictionary(
+                    g => g.Key/*.ToUpperInvariant()*/, 
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            List<Error> errors = new();
+            foreach (var error in errorsDictionary)
+            {
+                errors.Add(new Error(error.Key, error.Value.FirstOrDefault()));
+            }
             return Result<Guid>.Failures(errors);
         }
         

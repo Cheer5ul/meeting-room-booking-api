@@ -9,6 +9,7 @@ using RoomBooking.Application.Validations.Validators.Bookings;
 using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Application.Validations.Validators.Users;
 using RoomBooking.Core.Abstractions.Services;
+using RoomBooking.Core.Models;
 using RoomBooking.DataAccess;
 using RoomBooking.DataAccess.DbContext;
 using Serilog;
@@ -21,7 +22,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInte
 builder.Host.UseSerilog((context, services, configuration)
     => configuration
         .ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
+        .ReadFrom.Services(services) 
         .Enrich.FromLogContext());
 
 builder.Services.AddProblemDetails(configure =>
@@ -53,7 +54,13 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomGettingValidator, RoomGettingValidator>();
 
- builder.Services.AddScoped<IFailureHandler, FailureHandler>();
+//Fluent Validators
+builder.Services.AddValidatorsFromAssemblyContaining<BookingValidator>();
+builder.Services.AddScoped<IValidator<Booking>, BookingValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserCreationDtoValidator>();
+
+
+builder.Services.AddScoped<IFailureHandler, FailureHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();

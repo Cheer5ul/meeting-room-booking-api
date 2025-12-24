@@ -45,4 +45,20 @@ public static class BookingErrors
     public static readonly Error Forbidden = new Error(
         "Booking.Forbidden",
         "Forbidden error occurred.");
+    
+    public static readonly Error EmptyStartTime = new Error(
+        "Booking.EmptyStartTime",
+        "Start time cannot be empty.");
+
+    public static readonly Error EmptyEndTime = new Error(
+        "Booking.EmptyEndTime",
+        "End time cannot be empty.");
+
+    public static readonly Error UserOrRoomNotExisting = new Error(
+        "Booking.UserOrRoomNotExisting",
+        "User or room does not exist.");
+    
+    public static readonly Error StartsTooLate = new Error(
+        "Booking.StartsTooLate",
+        "Booking will start after too much time. The maximum start time is in one year");
 }
