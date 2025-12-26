@@ -1,4 +1,4 @@
-﻿namespace RoomBooking.Core.Models;
+﻿namespace RoomBooking.Core.Models.Room;
 
 public class Room
 {
@@ -13,7 +13,7 @@ public class Room
         HasWhiteBoard = hasWhiteBoard;
     }
     public Guid Id { get; }
-    public string Name { get; } = string.Empty;
+    public string Name { get; } 
     public int Capacity { get; }
     public bool HasProjector { get; }
     public bool HasTv { get; }

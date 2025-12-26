@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using RoomBooking.Core.Models.User;
+using RoomBooking.Core.Results.Errors;
 
 namespace RoomBooking.Application.Validations.Validators.Users;
 
@@ -10,18 +11,32 @@ public sealed class UserCreationValidator : AbstractValidator<User>
         // Email validation
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(100).WithMessage("Name must not exceed 100 characters");
+                .WithErrorCode(UserErrors.NameRequired.Code)
+                .WithMessage(UserErrors.NameRequired.Description)
+            .MaximumLength(100)
+                .WithErrorCode(UserErrors.NameExceedsCharacterAmount.Code)
+                .WithMessage(UserErrors.NameExceedsCharacterAmount.Description);
 
         // Password validation
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty()
+                .WithErrorCode(UserErrors.EmailRequired.Code)
+                .WithMessage(UserErrors.EmailRequired.Description)
+            .EmailAddress()
+                .WithErrorCode(UserErrors.InvalidEmail.Code)
+                .WithMessage(UserErrors.InvalidEmail.Description);
 
         // Department validation
         RuleFor(x => x.Department)
-            .NotEmpty().WithMessage("Department is required")
-            .MinimumLength(2).WithMessage("Department length should be at least 2 character")
-            .MaximumLength(50).WithMessage("Department length can be maximum 50 characters");
+            .NotEmpty()
+                .WithErrorCode(UserErrors.DepartmentRequired.Code)
+                .WithMessage(UserErrors.DepartmentRequired.Description)
+            .MinimumLength(2)
+                .WithErrorCode(UserErrors.TooShortDepartmentName.Code)
+                .WithMessage(UserErrors.TooShortDepartmentName.Description)
+            .MaximumLength(50)
+                .WithErrorCode(UserErrors.TooLongDepartmentName.Code)
+                .WithMessage(UserErrors.TooLongDepartmentName.Description);
         
         // AddressInfo validation 
         // RuleFor(x => x.AddressInfo)
@@ -29,5 +44,4 @@ public sealed class UserCreationValidator : AbstractValidator<User>
         //     .SetValidator(new AddressInfoValidator());
 
     }
-    
 }

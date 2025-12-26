@@ -64,10 +64,10 @@ builder.Services.AddScoped<IValidationToErrorConverter, ValidationToErrorConvert
 builder.Services.AddValidatorsFromAssemblyContaining<BookingValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UserCreationValidator>();
-// builder.Services.AddValidatorsFromAssemblyContaining<UserUpdateValidator>();
-
+builder.Services.AddValidatorsFromAssemblyContaining<UserUpdateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressInfoAddingDtoValidator>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<RoomCreationValidator>();
 
 builder.Services.AddScoped<IFailureHandler, FailureHandler>();
 builder.Services.AddProblemDetails();

@@ -23,8 +23,8 @@ public class User
         (Guid id, string name, string email, string department, List<Booking>? bookings = default(List<Booking>))
     {
         string error = string.Empty;
-        if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(department))
-            error = "Invalid name or email or department";
+        // if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(department))
+        //     error = "Invalid name or email or department";
 
         var user = new User
         (

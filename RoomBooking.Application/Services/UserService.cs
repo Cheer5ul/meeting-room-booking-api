@@ -85,9 +85,9 @@ public class UserService(
 
            if (!canUpdate)
            {
-               errors.Add(UserErrors.UserNotFound);
                logger.LogInformation("{@MethodName} User {@UserId} does not exist",
                    nameof(UpdateUser), id);
+               errors.Add(UserErrors.UserNotFound);
            }
                 
             

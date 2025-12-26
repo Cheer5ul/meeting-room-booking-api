@@ -4,6 +4,7 @@ using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Room;
 
 namespace RoomBooking.API.Controllers;
 
@@ -79,7 +80,7 @@ public class RoomsController : ControllerBase
             roomRequest.HasWhiteBoard);
 
         if (!string.IsNullOrEmpty(error))
-        {//think over a better way and logging
+        {    //think over a better way and logging
             return BadRequest(error);
         }
         

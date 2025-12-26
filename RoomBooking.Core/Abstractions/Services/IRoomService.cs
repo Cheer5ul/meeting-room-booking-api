@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Room;
 using RoomBooking.Core.Results;
 
 namespace RoomBooking.Core.Abstractions.Services;

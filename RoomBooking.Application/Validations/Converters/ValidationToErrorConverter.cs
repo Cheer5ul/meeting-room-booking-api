@@ -9,7 +9,7 @@ public class ValidationToErrorConverter : IValidationToErrorConverter
     public List<Error> ValidationToErrors(List<ValidationFailure> validationErrors)
     {
         var errorsDictionary = validationErrors
-            .GroupBy(e => e.PropertyName)
+            .GroupBy(e => e.ErrorCode)
             .ToDictionary(
                 g => string.IsNullOrEmpty(g.Key) ? "" : g.Key,
                 g => g.Select(e => e.ErrorMessage).ToArray());

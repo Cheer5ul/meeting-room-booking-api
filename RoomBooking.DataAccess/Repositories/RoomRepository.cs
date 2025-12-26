@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Room;
 using RoomBooking.DataAccess.DbContext;
 using RoomBooking.DataAccess.Entities;
 using RoomBooking.DataAccess.Entities.RoomEntity;

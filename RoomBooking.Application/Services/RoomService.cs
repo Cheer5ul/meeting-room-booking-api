@@ -1,9 +1,14 @@
 ﻿using System.Runtime.CompilerServices;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
+using RoomBooking.Application.DTOs.Room;
 using RoomBooking.Application.Validations.Abstractions.Rooms;
+using RoomBooking.Application.Validations.Abstractions.Validators;
+using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Room;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 
@@ -11,7 +16,10 @@ namespace RoomBooking.Application.Services;
 
 public class RoomService(IRoomRepository repository,
     IRoomGettingValidator validator,
-    ILogger<RoomService> logger) : IRoomService
+    IValidator<Room> roomCreationValidator,
+    IValidator<RoomUpdateDto> roomUpdateDtoValidator,
+    ILogger<RoomService> logger,
+    IValidationToErrorConverter toErrorConverter) : IRoomService
 {
     public async Task<Result<List<Room>>> GetAllRooms(CancellationToken cancellationToken = default)
     {
@@ -40,7 +48,18 @@ public class RoomService(IRoomRepository repository,
         logger.LogInformation("{@MethodName}: Creating a new room: {@Room}",
             nameof(CreateRoom), room);
         
-        //need some validation and fix controller validation
+        //edit: some validation done ; fix controller validation!
+        var validationResult = roomCreationValidator.Validate(instance: room);
+
+        if (!validationResult.IsValid)
+        {
+            logger.LogInformation("{@MethodName} Validation errors occured while creating a new room: {@Erros}",
+                nameof(CreateRoom), validationResult.Errors);
+            
+            var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+
+            return Result<Guid>.Failures(errors);
+        }
         
         var result = await repository.Create(room, cancellationToken);
             
@@ -53,11 +72,26 @@ public class RoomService(IRoomRepository repository,
         bool hasTv, bool hasWhiteBoard, CancellationToken cancellationToken = default)
     {
         var canUpdate = await validator.IsExisting(id, cancellationToken);
-        if (!canUpdate)
+        
+        var roomUpdateDto = new RoomUpdateDto(name, capacity, hasProjector, hasTv, hasWhiteBoard);
+        
+        var validationResult = roomUpdateDtoValidator.Validate(roomUpdateDto);
+        
+        if (!canUpdate ||  !validationResult.IsValid)
         {
-            logger.LogInformation("{@MethodName}: Cannot update unexisting room: {@Room}",
+            logger.LogInformation("{@MethodName}: Room updating failed: {@Room}",
                 nameof(UpdateRoom), id);
-            return Result<ITuple>.Failures([RoomErrors.RoomNotFound]);
+            
+            var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+
+            if (!canUpdate)
+            {
+                logger.LogInformation("{@MethodName} Room {@RoomId} does not exist",
+                    nameof(UpdateRoom), id);
+                errors.Add(RoomErrors.RoomNotFound);
+            }
+            
+            return Result<ITuple>.Failures(errors);
         }
 
         var affectedRows = await repository.Update(id, name, capacity, hasProjector, hasTv, hasWhiteBoard, cancellationToken);
@@ -74,11 +108,12 @@ public class RoomService(IRoomRepository repository,
             nameof(DeleteRoom), id);
         
         var canDelete = await validator.IsExisting(id, cancellationToken);
+        
         if (!canDelete)
         {
             logger.LogInformation("{@MethodName}: Cannot delete unexisting room: {@Room}",
                 nameof(UpdateRoom), id);
-            return Result<Guid>.Failures([UserErrors.UserNotFound]);
+            return Result<Guid>.Failures([RoomErrors.RoomNotFound]);
         }
         
         var deletedRows = await repository.Delete(id, cancellationToken);
