@@ -1,20 +1,27 @@
 ﻿using System.Runtime.CompilerServices;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
+using RoomBooking.Application.DTOs.AddressInfo;
 using RoomBooking.Application.Validations.Abstractions.Users;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
-using RoomBooking.Core.Models;
 using RoomBooking.Core.Models.User;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
+using RoomBooking.Application.DTOs.User;
+using RoomBooking.Application.Validations.Abstractions.Validators;
 
 
 namespace RoomBooking.Application.Services;
 
 public class UserService(
-    IUserRepository userRepository, 
-    IUserGettingValidator userValidator,
-    ILogger<UserService> logger) : IUserService
+    IUserRepository userRepository,
+    ILogger<UserService> logger,
+    IUserGettingValidator userGettingValidator,
+    IValidator<User> userCreationValidator,
+    IValidator<UserUpdateDto> userUpdateValidator,
+    IValidator<AddresInfoAddingDto>  addressInfoDtoValidator,
+    IValidationToErrorConverter toErrorConverter) : IUserService
 {
     public async Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken = default)
     {
@@ -39,33 +46,52 @@ public class UserService(
         logger.LogInformation("{@MethodName}: Creating new user. Name: {@UserName}, Email: {@UserEmail}",
             nameof(CreateUser), user.Name, user.Email);
         
-        //have to add validation here
-        
-       // if (errors.Any())
-       // {
-       //     logger.LogError("{@MethodName}: Error creating user: {@UserName}, Email: {@UserEmail}", 
-       //         nameof(CreateUser),
-       //         user.Name,
-       //         user.Email);
-       //     //return Result<Guid>.Failures(errors:);
-       // }
+        var validationResult = userCreationValidator.Validate(instance: user);
+
+        if (!validationResult.IsValid)
+        {
+            logger.LogInformation("{@MethodName} Validation errors occured while creating a new user: {@Erros}",
+                nameof(CreateUser), validationResult.Errors);
+
+            var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+            
+            return Result<Guid>.Failures(errors);
+        }
        
-       var userId = await userRepository.Create(user, cancellationToken);
-       logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}", 
-           nameof(CreateUser), userId);
-       return userId;
+        var userId = await userRepository.Create(user, cancellationToken);
+        logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}", 
+            nameof(CreateUser), userId);
+        return userId;
     }
 
     public async Task<Result<ITuple>> UpdateUser(Guid id, string name, string email, string department, 
         CancellationToken cancellationToken = default)
     {
-        var canUpdate = await userValidator.IsUserExists(id, cancellationToken);
+        logger.LogInformation("{@Methodname} Attempting to update user: {@UserId}",
+            nameof(UpdateUser), id);
+        
+        var canUpdate = await userGettingValidator.IsUserExists(id, cancellationToken);
 
-        if (!canUpdate)
+        var userUpdateDto = new UserUpdateDto(name, email, department);
+
+        var validationResult = userUpdateValidator.Validate(userUpdateDto);
+        
+        if (!canUpdate || !validationResult.IsValid)
         {
             logger.LogWarning("{@MethodName}: Cannot update unexisting user: {@UserId}",
                 nameof(UpdateUser), id);
-            return Result<ITuple>.Failures([UserErrors.UserNotFound]);
+            
+           var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+
+           if (!canUpdate)
+           {
+               errors.Add(UserErrors.UserNotFound);
+               logger.LogInformation("{@MethodName} User {@UserId} does not exist",
+                   nameof(UpdateUser), id);
+           }
+                
+            
+            return Result<ITuple>.Failures(errors);
         }
         
         var affectedRows = await userRepository.Update(id, name, email, department, cancellationToken);
@@ -81,7 +107,7 @@ public class UserService(
         logger.LogInformation("{@MethodName}: Attempting to delete user {@UserId}",
             nameof(DeleteUser), id);
         
-        var canDelete = await userValidator.IsUserExists(id, cancellationToken);
+        var canDelete = await userGettingValidator.IsUserExists(id, cancellationToken);
         if (!canDelete)
         {
             logger.LogWarning("{@MethodName}: Cannot delete unexisting user: {@UserId}",
@@ -103,8 +129,33 @@ public class UserService(
         logger.LogInformation("{@MethodName}: Attempting to add AddressInfo for user {@UserId}",
             nameof(AddAddressInfo), id);
 
+        var canUpdate = await userGettingValidator.IsUserExists(id, cancellationToken);
+
+        if (!canUpdate)
+        {
+            logger.LogWarning("{@MethodName}: Cannot add address to an unexisting user: {@UserId}",
+                nameof(AddAddressInfo), id);
+            return Result<ITuple>.Failures([UserErrors.UserNotFound]);
+        }
+        
+        var addressInfoDto = new AddresInfoAddingDto(street, city, state, postalCode, country);
+        
+        var validationResult = addressInfoDtoValidator.Validate(addressInfoDto);
+
+        if (!validationResult.IsValid)
+        {
+            logger.LogInformation("{@MethodName} Validation errors occured while adding the AddressInfo: {@AddressInfoDto}",
+                nameof(AddAddressInfo), addressInfoDto);
+            
+            var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+            
+            return Result<ITuple>.Failures(errors);
+        }
+        
         var addedInfo = await userRepository.AddAddressInfo(
             id, street, city, state, postalCode, country, cancellationToken);
+        logger.LogInformation("{@MethodName}: AddressInfo was successfully added: {@AddressInfoDto}",
+            nameof(AddAddressInfo), addedInfo);
 
         return Result<ITuple>.Success(addedInfo);
     }

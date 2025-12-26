@@ -1,17 +1,23 @@
 using FluentValidation;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
+using RoomBooking.Application.DTOs.AddressInfo;
 using RoomBooking.Application.Services;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Application.Validations.Abstractions.Rooms;
 using RoomBooking.Application.Validations.Abstractions.Users;
+using RoomBooking.Application.Validations.Abstractions.Validators;
+using RoomBooking.Application.Validations.Converters;
 using RoomBooking.Application.Validations.Validators.Bookings;
 using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Application.Validations.Validators.Users;
+using RoomBooking.Application.Validations.Validators.Users.AddressInfo;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.User;
 using RoomBooking.DataAccess;
 using RoomBooking.DataAccess.DbContext;
+using RoomBooking.DataAccess.Migrations;
 using Serilog;
 using Serilog.Events;
 
@@ -46,18 +52,21 @@ builder.Services.AddPersistence(builder.Configuration);
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserGettingValidator,  UserGettingValidator>();
-
-builder.Services.AddScoped<IBookingCreationValidator, BookingCreationValidator>();
 builder.Services.AddScoped<IBookingService, BookingService>();
-
 builder.Services.AddScoped<IRoomService, RoomService>();
+
+//Custom validators
 builder.Services.AddScoped<IRoomGettingValidator, RoomGettingValidator>();
+builder.Services.AddScoped<IUserGettingValidator,  UserGettingValidator>();
+builder.Services.AddScoped<IValidationToErrorConverter, ValidationToErrorConverter>();
 
 //Fluent Validators
 builder.Services.AddValidatorsFromAssemblyContaining<BookingValidator>();
-builder.Services.AddScoped<IValidator<Booking>, BookingValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UserCreationDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<UserCreationValidator>();
+// builder.Services.AddValidatorsFromAssemblyContaining<UserUpdateValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<AddressInfoAddingDtoValidator>();
 
 
 builder.Services.AddScoped<IFailureHandler, FailureHandler>();

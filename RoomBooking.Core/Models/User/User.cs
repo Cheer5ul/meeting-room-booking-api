@@ -39,14 +39,15 @@ public class User
     }
 
     public AddressInfo AddAddressInfo
-    ( string street, string city, string state, string postalCode,
-        string country)
+        (string street, string city, string state, string postalCode,
+            string country)
     {
         var addressInfo = AddressInfo.Create(
              street, city, state, postalCode, country);
-
+        
         AddressInfo = addressInfo;
         
         return addressInfo;
     }
+    
 }

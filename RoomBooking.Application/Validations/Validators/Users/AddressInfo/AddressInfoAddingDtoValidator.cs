@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
-using RoomBooking.Core.Models.User;
+using RoomBooking.Application.DTOs.AddressInfo;
 
-namespace RoomBooking.Application.Validations.Validators.Users;
+namespace RoomBooking.Application.Validations.Validators.Users.AddressInfo;
 
 // public interface IAddressApi
 // {
 //     Task<bool> ValidateAsync(AddressInfo addressInfo);
 // }
-public sealed class AddressInfoValidator : AbstractValidator<AddressInfo>
+public sealed class AddressInfoAddingDtoValidator : AbstractValidator<AddresInfoAddingDto>
 {
-    public AddressInfoValidator(/*IAddressApi addressApi*/)
+    public AddressInfoAddingDtoValidator(/*IAddressApi addressApi*/)
     {
         RuleFor(x => x.Street)
             .NotEmpty().WithMessage("Street is required");
