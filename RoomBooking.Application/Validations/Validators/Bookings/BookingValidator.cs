@@ -35,9 +35,6 @@ public sealed class BookingValidator : AbstractValidator<Booking>
 
         //Not too late start check
         RuleFor(booking => booking.StartTime)
-            .NotEmpty()
-            .WithMessage(BookingErrors.EmptyStartTime.Description)
-            .WithErrorCode(BookingErrors.EmptyStartTime.Code)
             .Must(StartsNotTooLate)
             .WithMessage(BookingErrors.StartsTooLate.Description)
             .WithErrorCode(BookingErrors.StartsTooLate.Code);
@@ -105,7 +102,7 @@ public sealed class BookingValidator : AbstractValidator<Booking>
     private bool StartsNotTooLate(DateTime startTime)
     {
         //use utc
-        var maxFutureBooking = DateTime.Now + _maxFutureBooking;
+        var maxFutureBooking = DateTime.UtcNow + _maxFutureBooking;
         
         return startTime < maxFutureBooking;
     }

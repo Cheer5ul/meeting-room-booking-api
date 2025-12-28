@@ -24,6 +24,8 @@ using Serilog.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+builder.Services.Configure<RoomValidationSettings>(
+    builder.Configuration.GetSection("RoomValidationSettings")); //using IOptions 
 
 builder.Host.UseSerilog((context, services, configuration)
     => configuration

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using RoomBooking.API.Contracts.UserContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;
-using RoomBooking.Core.Models.User;
+using RoomBooking.Application.Validations.Validators;
 
 namespace RoomBooking.API.Controllers;
 

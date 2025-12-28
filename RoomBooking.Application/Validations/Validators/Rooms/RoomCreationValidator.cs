@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Options;
 using RoomBooking.Core.Models.Room;
 using RoomBooking.Core.Results.Errors;
 
@@ -6,13 +7,13 @@ namespace RoomBooking.Application.Validations.Validators.Rooms;
 
 public sealed class RoomCreationValidator : AbstractValidator<Room>
 {
-    public RoomCreationValidator()
+    public RoomCreationValidator(IOptions<RoomValidationSettings> options)
     {
         RuleFor(x => x.Name)
             .NotEmpty()
                 .WithErrorCode(RoomErrors.NameRequired.Code)
                 .WithMessage(RoomErrors.NameRequired.Description)
-            .MaximumLength(50)
+            .MaximumLength(options.Value.MaximumNameLength)
                 .WithErrorCode(RoomErrors.NameTooLong.Code)
                 .WithMessage(RoomErrors.NameTooLong.Description);
         

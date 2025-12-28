@@ -14,7 +14,7 @@ public class ValidationToErrorConverter : IValidationToErrorConverter
                 g => string.IsNullOrEmpty(g.Key) ? "" : g.Key,
                 g => g.Select(e => e.ErrorMessage).ToArray());
 
-        List<Error> errors = new();
+        List<Error> errors = [];
 
         foreach (var error in errorsDictionary)
         {
