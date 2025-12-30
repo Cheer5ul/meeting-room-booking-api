@@ -1,7 +1,6 @@
-﻿using RoomBooking.Core.Results;
-using RoomBooking.Core.Results.Errors;
+﻿using RoomBooking.Core.Results.Errors;
 
-namespace RoomBooking.Core.Models;
+namespace RoomBooking.Core.Models.Booking;
 
 public class Booking
 {

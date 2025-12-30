@@ -4,6 +4,7 @@ using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Booking;
 
 
 namespace RoomBooking.API.Controllers;

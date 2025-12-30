@@ -2,7 +2,7 @@
 
 public class User
 {
-    private User(Guid id, string name, string email, string department, List<Booking>? bookings = default(List<Booking>))
+    private User(Guid id, string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
         Id = id;
         Name = name;
@@ -17,10 +17,10 @@ public class User
     
     public AddressInfo? AddressInfo { get; private set;}
     
-    public List<Booking> Bookings { get; set; }
+    public List<Booking.Booking> Bookings { get; set; }
 
     public static (User user, string? error) Create
-        (Guid id, string name, string email, string department, List<Booking>? bookings = default(List<Booking>))
+        (Guid id, string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
         string error = string.Empty;
         // if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(department))

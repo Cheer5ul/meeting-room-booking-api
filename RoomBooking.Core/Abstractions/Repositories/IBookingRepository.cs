@@ -1,4 +1,5 @@
 ﻿using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Booking;
 
 namespace RoomBooking.Core.Abstractions.Repositories;
 

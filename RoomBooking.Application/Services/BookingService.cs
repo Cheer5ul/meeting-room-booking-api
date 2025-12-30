@@ -1,12 +1,16 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using RoomBooking.Application.Validations.Abstractions.Bookings;
 using RoomBooking.Application.Validations.Abstractions.Validators;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models;
+using RoomBooking.Core.Models.Booking;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
+using RoomBooking.DataAccess.DbContext;
 
 namespace RoomBooking.Application.Services;
 
@@ -14,7 +18,8 @@ public class BookingService(
     IBookingRepository repository,
     IValidator<Booking> validator,
     IValidationToErrorConverter  toErrorConverter,
-    ILogger<BookingService> logger) : IBookingService
+    ILogger<BookingService> logger,
+    RoomBookingDbContext context) : IBookingService
 {
     public async Task<Result<List<Booking>>> GetAllBookings(CancellationToken cancellationToken = default)
     {
@@ -39,7 +44,7 @@ public class BookingService(
 
     public async Task<Result<Guid>> Create(Booking booking, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("{@MethodName}: Creating booking: {@Booking}", nameof(Create), booking);
+        logger.LogInformation("{@MethodName}: Creating booking: {@BookingId}", nameof(Create), booking.Id);
         
         var validationResult = await validator.ValidateAsync(booking, cancellationToken);
         
