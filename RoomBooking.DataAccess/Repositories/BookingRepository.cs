@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using RoomBooking.Core.Abstractions.Repositories;
-using RoomBooking.Core.Models;
 using RoomBooking.Core.Models.Booking;
-using RoomBooking.DataAccess.Constraints;
 using RoomBooking.DataAccess.DbContext;
-using RoomBooking.DataAccess.Entities;
 using RoomBooking.DataAccess.Entities.BookingEntity;
 using RoomBooking.DataAccess.Exceptions;
 
@@ -95,30 +91,14 @@ public class BookingRepository(
 
             return bookingEntitiy.Id;
         }
-        catch (DbUpdateException ex) when (IsOverlapConstraintViolation(ex))
+        catch (Exception ex)
         {
-            logger.LogWarning("Booking overlap detected for room {@RoomId} at {@StartTime}-{@EndTime}",
-                booking.RoomId, 
-                booking.StartTime,
-                booking.EndTime
-                );
+            logger.LogWarning(
+                "An error occured while creating a booking {@BookingId} for room {@RoomId} at {@StartTime}-{@EndTime}",
+                booking.Id, booking.RoomId, booking.StartTime, booking.EndTime);
             
-            throw new BookingOverlapException(
-                booking.RoomId,
-                booking.StartTime,
-                booking.EndTime);
+            throw new BookingCreationException(booking.Id);
         }
-    }
-
-    private static bool IsOverlapConstraintViolation(DbUpdateException exception)
-    {
-        if (exception.InnerException is PostgresException postgresException)
-        {
-            return postgresException.SqlState == CustomPostgresErrorCodes.ExclusionConstraintViolation &&
-                   postgresException.ConstraintName == DatabaseConstraints.BookingOverlapConstraint;
-        }
-        
-        return false;
     }
 
     public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)

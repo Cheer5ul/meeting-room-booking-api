@@ -61,4 +61,8 @@ public static class BookingErrors
     public static readonly Error StartsTooLate = new Error(
         "Booking.StartsTooLate",
         "Booking will start after too much time. The maximum start time is in one year");
+    
+    public static readonly Error TryAgainLater = new Error(
+        "Booking.TryAgainLater",
+        "Try again later");
 }

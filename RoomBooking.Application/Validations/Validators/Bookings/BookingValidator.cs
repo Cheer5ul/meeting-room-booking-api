@@ -72,17 +72,18 @@ public sealed class BookingValidator : AbstractValidator<Booking>
                 b.EndTime != default &&
                 b.StartTime < b.EndTime);
         
+        // Better to check in service while locked 
         //Overlapping check
-        RuleFor(b =>b)
-            .MustAsync(async (booking, cancellationToken) =>
-                !await HasOverlappingAsync(booking, cancellationToken)).
-            WithMessage(BookingErrors.IsOverlapping.Description)
-            .WithErrorCode(BookingErrors.IsOverlapping.Code)
-            .When(b => b.RoomId != Guid.Empty &&  // avoiding unnecessary request to db
-                       b.UserId != Guid.Empty && 
-                       b.StartTime != default && // NRE protection
-                       b.EndTime != default && // NRE protection
-                       b.StartTime < b.EndTime); // avoiding unnecessary request with invalid times
+        // RuleFor(b =>b)
+        //     .MustAsync(async (booking, cancellationToken) =>
+        //         !await HasOverlappingAsync(booking, cancellationToken)).
+        //     WithMessage(BookingErrors.IsOverlapping.Description)
+        //     .WithErrorCode(BookingErrors.IsOverlapping.Code)
+        //     .When(b => b.RoomId != Guid.Empty &&  // avoiding unnecessary request to db
+        //                b.UserId != Guid.Empty && 
+        //                b.StartTime != default && // NRE protection
+        //                b.EndTime != default && // NRE protection
+        //                b.StartTime < b.EndTime); // avoiding unnecessary request with invalid times
     }
 
     private static bool BeInFuture(DateTime startTime)
@@ -121,22 +122,26 @@ public sealed class BookingValidator : AbstractValidator<Booking>
     private async Task<bool> ExistingUserAndRoomAsync(
         Booking booking, CancellationToken cancellationToken = default)
     {
-        return await _userRepository.GetById(booking.UserId, cancellationToken) != null &&
-               await _roomRepository.GetById(booking.RoomId, cancellationToken) != null;
+        var user = await  _userRepository.GetById(booking.UserId, cancellationToken);
+        if(user == null) return false;
+        
+        var room =  await _roomRepository.GetById(booking.RoomId, cancellationToken);
+        return room != null;
     }
     
-    private async Task<bool> HasOverlappingAsync(
-        Booking booking, CancellationToken cancellationToken = default)
-    {
-        var existingItems = await _bookingRepository.GetByRoom(booking.RoomId, cancellationToken);
-        
-        //updating existing booking
-        var bookingsToCheck = existingItems
-            .Where(b => b.Id != booking.Id) //excluding the current one when updating
-            .ToList();
-        
-        return bookingsToCheck.Any(b =>
-            booking.StartTime < b.EndTime &&
-            b.StartTime < booking.EndTime);
-    }
+    // Better to check in service while locked 
+    // private async Task<bool> HasOverlappingAsync(
+    //     Booking booking, CancellationToken cancellationToken = default)
+    // {
+    //     var existingItems = await _bookingRepository.GetByRoom(booking.RoomId, cancellationToken);
+    //     
+    //     //updating existing booking
+    //     var bookingsToCheck = existingItems
+    //         .Where(b => b.Id != booking.Id) //excluding the current one when updating
+    //         .ToList();
+    //     
+    //     return bookingsToCheck.Any(b =>
+    //         booking.StartTime < b.EndTime &&
+    //         b.StartTime < booking.EndTime);
+    // }
 }
