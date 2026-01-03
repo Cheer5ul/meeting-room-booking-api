@@ -34,7 +34,9 @@ public static class UserErrors
     public static readonly Error DepartmentRequired = new(
         "User.DepartmentRequired",
         "Department is required");
-    
-    
-    
+
+    public static readonly Error EmailAlreadyUsed = new(
+        "User.EmailAlreadyUser",
+        "Email is already in use");
+
 }

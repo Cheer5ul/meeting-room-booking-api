@@ -39,5 +39,8 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             address.Property(x => x.PostalCode).HasMaxLength(20);
             address.Property(x => x.Country).HasMaxLength(100);
         });
+        
+        //Using Unique Index to avoid race conditions 
+        builder.HasIndex(u => u.Email).IsUnique();
     }
 }

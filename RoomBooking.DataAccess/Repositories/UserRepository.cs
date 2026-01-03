@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Models.User;
 using RoomBooking.DataAccess.DbContext;
@@ -71,7 +72,16 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
         };
 
         await dbContext.Users.AddAsync(userEntity, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
+
+        // try
+        // {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        // }
+        // catch (DbUpdateException exception)
+        //     when (exception.InnerException is NpgsqlException {SqlState: PostgresErrorCodes.UniqueViolation } )
+        // {
+        //     throw new EmailAlreadyInUseException(user.Email, exception);
+        // }
         
         return userEntity.Id;
     }

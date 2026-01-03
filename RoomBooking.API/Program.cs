@@ -60,6 +60,7 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 //Custom validators
 builder.Services.AddScoped<IRoomGettingValidator, RoomGettingValidator>();
 builder.Services.AddScoped<IUserGettingValidator,  UserGettingValidator>();
+builder.Services.AddScoped<IUserEmailValidator, UserEmailValidator>();
 builder.Services.AddScoped<IValidationToErrorConverter, ValidationToErrorConverter>();
 
 //Fluent Validators

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using RoomBooking.Application.DTOs.AddressInfo;
 using RoomBooking.Application.Validations.Abstractions.Users;
 using RoomBooking.Core.Abstractions.Repositories;
@@ -10,6 +11,7 @@ using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 using RoomBooking.Application.DTOs.User;
 using RoomBooking.Application.Validations.Abstractions.Validators;
+using RoomBooking.Application.Validations.Validators.Users;
 
 
 namespace RoomBooking.Application.Services;
@@ -18,6 +20,7 @@ public class UserService(
     IUserRepository userRepository,
     ILogger<UserService> logger,
     IUserGettingValidator userGettingValidator,
+    IUserEmailValidator userEmailValidator,
     IValidator<User> userCreationValidator,
     IValidator<UserUpdateDto> userUpdateValidator,
     IValidator<AddresInfoAddingDto>  addressInfoDtoValidator,
@@ -48,20 +51,34 @@ public class UserService(
         
         var validationResult = userCreationValidator.Validate(instance: user);
 
-        if (!validationResult.IsValid)
+        bool isEmailUsed = await userEmailValidator.IsEmailAlreadyUsed(user.Email, cancellationToken);
+
+        if (!validationResult.IsValid || isEmailUsed)
         {
             logger.LogInformation("{@MethodName} Validation errors occured while creating a new user: {@Erros}",
                 nameof(CreateUser), validationResult.Errors);
 
             var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
+            if(isEmailUsed)
+                errors.Add(UserErrors.EmailAlreadyUsed);
             
             return Result<Guid>.Failures(errors);
         }
-       
-        var userId = await userRepository.Create(user, cancellationToken);
-        logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}", 
-            nameof(CreateUser), userId);
-        return userId;
+
+        try
+        {
+            var userId = await userRepository.Create(user, cancellationToken);
+            logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}",
+                nameof(CreateUser), userId);
+            return userId;
+        }
+        catch (Exception exception)
+            when (exception.InnerException is NpgsqlException {SqlState: PostgresErrorCodes.UniqueViolation })
+        {
+            logger.LogWarning("{@MehtodName} race condition occured while creating users with the same email {@Excepton}",
+                nameof(CreateUser), exception);
+            return Result<Guid>.Failures([UserErrors.EmailAlreadyUsed]);
+        }
     }
 
     public async Task<Result<ITuple>> UpdateUser(Guid id, string name, string email, string department, 
