@@ -151,4 +151,4 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Setti
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Console.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.Debug.dll
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks.File.dll
-D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260103.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260105.json

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.Contracts.RoomContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core;
@@ -22,6 +23,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("token-by-ip")]
     public async Task<ActionResult<List<RoomResponse>>> GetAllRooms(CancellationToken cancellationToken)
     {
         var result = await _roomService.GetAllRooms(cancellationToken);
@@ -45,6 +47,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] 
     public async Task<ActionResult<RoomResponse>> GetRoomById(Guid id, CancellationToken cancellationToken)
     {
         var result = await _roomService.GetRoomById(id, cancellationToken);
@@ -68,6 +71,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult<Guid>> CreateRoon([FromBody] RoomRequest roomRequest,
         CancellationToken cancellationToken)
     {
@@ -97,6 +101,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult<Guid>> UpdateRoom(Guid id, [FromBody] RoomRequest roomRequest,
         CancellationToken cancellationToken)
     {
@@ -127,6 +132,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult<Guid>> DeleteRoom(Guid id, CancellationToken cancellationToken)
     {
         var result = await _roomService.DeleteRoom(id, cancellationToken);

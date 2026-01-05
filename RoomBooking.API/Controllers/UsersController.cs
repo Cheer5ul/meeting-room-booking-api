@@ -1,9 +1,8 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.Contracts.UserContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;
-using RoomBooking.Application.Validations.Validators;
 
 namespace RoomBooking.API.Controllers;
 
@@ -20,6 +19,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("token-by-ip")] //for lists, burst is allowed
     public async Task<ActionResult<List<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
     {
         var result = await _userService.GetAllUsers(cancellationToken);
@@ -41,6 +41,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] //for single requests strict limit
     public async Task<ActionResult<UserResponse>> GetUserById(Guid id, CancellationToken cancellationToken)
     {
         
@@ -64,6 +65,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("create-user")]
+    [EnableRateLimiting("fixed-by-ip")] // For creation | spam protection
     public async Task<ActionResult<Guid>> CreateUser([FromBody] UserRequest userRequest,
         CancellationToken cancellationToken)
     {
@@ -91,6 +93,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] //for updates
     public async Task<ActionResult<Guid>> UpdateUser(Guid id, [FromBody] UserRequest userRequest, CancellationToken cancellationToken)
     {
         
@@ -119,6 +122,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult<Guid>> DeleteUser(Guid id, CancellationToken cancellationToken)
     {
         var result = await _userService.DeleteUser(id, cancellationToken);
@@ -134,6 +138,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("add-user-address")]
+    [EnableRateLimiting("concurrency-by-ip")] //for db operations | Protects db from too many connections
     public async Task<ActionResult<Guid>> AddUserAddressInfo(Guid id, [FromBody] UserAddressInfoRequest addressInfoRequest,
         CancellationToken cancellationToken)
     {

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.Contracts.BookingContracts;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.Core.Abstractions.Services;
@@ -24,6 +25,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet]
+    [EnableRateLimiting("token-by-ip")]
     public async Task<ActionResult<List<BookingResponse>>> GetAllBookings(CancellationToken cancellationToken)
     {
         var result = await _bookingService.GetAllBookings(cancellationToken);
@@ -48,6 +50,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet("by-user/{userId:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] 
     public async Task<ActionResult<BookingResponse>> GetBookingByUser(Guid userId, CancellationToken cancellationToken)
     {
         var result = await _bookingService.GetByUser(userId, cancellationToken);
@@ -71,6 +74,7 @@ public class BookingController : ControllerBase
     }
     
     [HttpGet("by-room/{roomId:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] 
     public async Task<ActionResult<BookingResponse>> GetBookingByRoom(Guid roomId, CancellationToken cancellationToken)
     {
         var result = await _bookingService.GetByRoom(roomId, cancellationToken);
@@ -94,6 +98,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("fixed-by-ip")] 
     public async Task<ActionResult<Guid>> CreateBooking([FromBody] BookingRequest bookingRequest,
         CancellationToken cancellationToken)
         {
@@ -116,6 +121,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [EnableRateLimiting("fixed-by-ip")] 
     public async Task<ActionResult<Guid>> DeleteBooking(Guid id, CancellationToken cancellationToken)
     {
         var result = await _bookingService.Delete(id, cancellationToken);
