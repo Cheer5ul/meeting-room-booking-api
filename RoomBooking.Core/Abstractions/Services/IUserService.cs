@@ -17,6 +17,6 @@ public interface IUserService
     Task<Result<Guid>> DeleteUser(Guid id, CancellationToken cancellationToken = default);
 
     Task<Result<ITuple>> AddAddressInfo(
-        Guid id, string street, string city, string state, string postalCode, string country,
+        Guid id, AddressInfo addressInfo,
         CancellationToken cancellationToken = default);
 }

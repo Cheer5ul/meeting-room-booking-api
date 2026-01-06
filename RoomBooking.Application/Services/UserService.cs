@@ -140,7 +140,7 @@ public class UserService(
     }
 
     public async Task<Result<ITuple>> AddAddressInfo(
-        Guid id, string street, string city, string state, string postalCode, string country,
+        Guid id, AddressInfo addressInfo,
         CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Attempting to add AddressInfo for user {@UserId}",
@@ -155,7 +155,12 @@ public class UserService(
             return Result<ITuple>.Failures([UserErrors.UserNotFound]);
         }
         
-        var addressInfoDto = new AddresInfoAddingDto(street, city, state, postalCode, country);
+        var addressInfoDto = new AddresInfoAddingDto(
+            addressInfo.Street, 
+            addressInfo.City,
+            addressInfo.State, 
+            addressInfo.PostalCode,
+            addressInfo.Country);
         
         var validationResult = addressInfoDtoValidator.Validate(addressInfoDto);
 
@@ -170,7 +175,12 @@ public class UserService(
         }
         
         var addedInfo = await userRepository.AddAddressInfo(
-            id, street, city, state, postalCode, country, cancellationToken);
+            id,
+            addressInfo.Street, 
+            addressInfo.City,
+            addressInfo.State, 
+            addressInfo.PostalCode,
+            addressInfo.Country, cancellationToken);
         logger.LogInformation("{@MethodName}: AddressInfo was successfully added: {@AddressInfoDto}",
             nameof(AddAddressInfo), addedInfo);
 

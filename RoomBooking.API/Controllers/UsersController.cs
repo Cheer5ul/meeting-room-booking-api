@@ -142,15 +142,17 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<Guid>> AddUserAddressInfo(Guid id, [FromBody] UserAddressInfoRequest addressInfoRequest,
         CancellationToken cancellationToken)
     {
-        var result = await _userService.AddAddressInfo(
-            id,
+        var user = await _userService.GetUserById(id, cancellationToken);
+        
+        //fabric method
+        var addressInfo = user.Value?.AddAddressInfo( // making user value nullable to avoid NRF | NEED REFACTOR
             addressInfoRequest.street,
             addressInfoRequest.city,
             addressInfoRequest.state,
             addressInfoRequest.postalCode,
-            addressInfoRequest.country,
-            cancellationToken);
+            addressInfoRequest.country) !;
         
+        var result = await _userService.AddAddressInfo(id, addressInfo, cancellationToken);
 
         if (result.IsFailure)
         {
