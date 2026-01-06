@@ -1,5 +1,6 @@
 using System.Threading.RateLimiting;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
@@ -76,11 +77,25 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
+    // handling rejected request properly returning problemDetails
     rateLimiterOptions.OnRejected = async (context, token) =>
     {
-        context.HttpContext.Request.Headers["Retry-After"] = "10";
-        await context.HttpContext.Response.WriteAsync(
-            "Too many requests. Please try again later", token);
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan retryAfter))
+        {
+            context.HttpContext.Response.Headers.RetryAfter = $"{retryAfter.TotalSeconds}";
+            
+            ProblemDetailsFactory problemDetailsFactory = context.HttpContext.RequestServices
+                .GetRequiredService<ProblemDetailsFactory>();
+            Microsoft.AspNetCore.Mvc.ProblemDetails problemDetails = problemDetailsFactory
+                .CreateProblemDetails(
+                    httpContext: context.HttpContext,
+                    statusCode: StatusCodes.Status429TooManyRequests,
+                    title: "Too many requests",
+                    detail: $"Too many requests. Please try again after {retryAfter.TotalSeconds} seconds"
+                );
+            
+            await context.HttpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken: token);
+        }
     };
     
     //Fixed Window
@@ -104,10 +119,10 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     //Token Bucket
     rateLimiterOptions.AddTokenBucketLimiter("token-by-ip", options =>
     {
-        options.TokenLimit = 100; //Burst capacity
+        options.TokenLimit = 100; //Burst capacity //100
         options.ReplenishmentPeriod = TimeSpan.FromSeconds(5);
         options.TokensPerPeriod = 10;
-        options.QueueLimit = 3;
+        // options.QueueLimit = 3;
     });
     
     //Concurrency limiter
@@ -120,8 +135,10 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     //Fixed Window USER based (needs authorization)
     rateLimiterOptions.AddPolicy("fixed-by-user", httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
+            
             partitionKey: httpContext.User.Identity?.Name?.ToString()
                           ?? "anonymous",
+            
             factory: partition => new FixedWindowRateLimiterOptions()
             {
                 Window = TimeSpan.FromSeconds(10),
@@ -131,19 +148,46 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
                 AutoReplenishment = true 
             })
     );
+
+    // //A better way to handle user-based rate limiter with authorization
+    // rateLimiterOptions.AddPolicy("per-user", (httpContext =>
+    // {
+    //     string? userId = httpContext.User.FindFirstValue("userId");
+    //
+    //     if (!string.IsNullOrWhiteSpace(userId))
+    //     {
+    //         return RateLimitPartition.GetTokenBucketLimiter(
+    //             partitionKey: userId,
+    //             factory: partition => new TokenBucketRateLimiterOptions
+    //             {
+    //                 TokenLimit = 5,
+    //                 TokensPerPeriod = 2,
+    //                 ReplenishmentPeriod = TimeSpan.FromMinutes(1), // +2 requests in 1 minute
+    //                 //QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+    //             });
+    //     }
+    //
+    //     return RateLimitPartition.GetFixedWindowLimiter(
+    //         partitionKey:"anonymous",
+    //         factory: _ => new FixedWindowRateLimiterOptions
+    //         {
+    //             PermitLimit = 5,
+    //             Window =  TimeSpan.FromMinutes(1),
+    //         });
+    // }));
     
-    //Global fixed window ip based rate limiter
-    rateLimiterOptions.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            //IP-BASED key:
-            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() 
-                          ?? "unknown",
-            
-            factory: _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 50,
-                Window = TimeSpan.FromMinutes(1)
-            }));
+    //Global fixed window ip based rate limiter | Currently disabled
+    // rateLimiterOptions.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    //     RateLimitPartition.GetFixedWindowLimiter(
+    //         //IP-BASED key:
+    //         partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() 
+    //                       ?? "unknown",
+    //         
+    //         factory: _ => new FixedWindowRateLimiterOptions
+    //         {
+    //             PermitLimit = 50,
+    //             Window = TimeSpan.FromMinutes(1)
+    //         }));
 });
 
 var app = builder.Build();

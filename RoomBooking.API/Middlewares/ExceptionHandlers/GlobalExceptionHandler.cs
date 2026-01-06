@@ -9,7 +9,13 @@ internal sealed class GlobalExceptionHandler(
     IProblemDetailsService problemDetailsService,
     ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-    //True if able to handle exception successfully
+    /// <summary>
+    ///  Tries to handle an exception successfully
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <param name="exception"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> true if able to handle exception successfully</returns>
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext, 
         Exception exception, 
