@@ -113,9 +113,9 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
         if (userEntity == null)
-            throw new NotFoundException($"User with id {id} not found");
+            throw new NotFoundException($"User with id {id} not found"); //throwing an id is not safe | need refactor
 
-        userEntity.AddressInfo = new AddressInfoEntity()
+        userEntity.AddressInfo = new AddressInfoEntity
         {
             Street = street,
             City = city,

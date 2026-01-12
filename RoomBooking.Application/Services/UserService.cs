@@ -12,6 +12,7 @@ using RoomBooking.Core.Results.Errors;
 using RoomBooking.Application.DTOs.User;
 using RoomBooking.Application.Validations.Abstractions.Validators;
 using RoomBooking.Application.Validations.Validators.Users;
+using RoomBooking.DataAccess.Exceptions;
 
 
 namespace RoomBooking.Application.Services;
@@ -173,17 +174,27 @@ public class UserService(
             
             return Result<ITuple>.Failures(errors);
         }
-        
-        var addedInfo = await userRepository.AddAddressInfo(
-            id,
-            addressInfo.Street, 
-            addressInfo.City,
-            addressInfo.State, 
-            addressInfo.PostalCode,
-            addressInfo.Country, cancellationToken);
-        logger.LogInformation("{@MethodName}: AddressInfo was successfully added: {@AddressInfoDto}",
-            nameof(AddAddressInfo), addedInfo);
 
-        return Result<ITuple>.Success(addedInfo);
+        //NEEDS REFACTOR
+        try
+        {
+            var addedInfo = await userRepository.AddAddressInfo(
+                id,
+                addressInfo.Street,
+                addressInfo.City,
+                addressInfo.State,
+                addressInfo.PostalCode,
+                addressInfo.Country, cancellationToken);
+            
+            logger.LogInformation("{@MethodName}: AddressInfo was successfully added: {@AddressInfoDto}",
+                nameof(AddAddressInfo), addedInfo);
+
+            return Result<ITuple>.Success(addedInfo);
+        }
+        catch (Exception exception)
+            when (exception is NotFoundException)
+        {
+            throw new NotFoundException($"User with id {id} not found");
+        }
     }
 }

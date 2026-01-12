@@ -145,7 +145,7 @@ public class UsersController : ControllerBase
         var user = await _userService.GetUserById(id, cancellationToken);
         
         //fabric method
-        var addressInfo = user.Value?.AddAddressInfo( // making user value nullable to avoid NRF | NEED REFACTOR
+        var addressInfo = user.Value?.AddAddressInfo( // making user value nullable to avoid NRF | NEEDS REFACTOR
             addressInfoRequest.street,
             addressInfoRequest.city,
             addressInfoRequest.state,
