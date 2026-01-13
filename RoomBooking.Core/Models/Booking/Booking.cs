@@ -4,7 +4,7 @@ namespace RoomBooking.Core.Models.Booking;
 
 public class Booking
 {
-    public Booking(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
+    private Booking(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
         Id = bookingId;
         RoomId = roomId;

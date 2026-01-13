@@ -69,18 +69,17 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<Guid>> CreateUser([FromBody] UserRequest userRequest,
         CancellationToken cancellationToken)
     {
-        var (user, error) = Core.Models.User.User.Create(
-            Guid.NewGuid(),
+        var userResult = Core.Models.User.User.Create(
              userRequest.Name,
              userRequest.Email,
             userRequest.Department);
 
-        if (!string.IsNullOrEmpty(error))
+        if (userResult.IsFailure)
         {
-            return BadRequest(error);
+            return BadRequest(userResult.Errors);
         }
 
-        var result = await _userService.CreateUser(user, cancellationToken);
+        var result = await _userService.CreateUser(userResult.Value, cancellationToken);
 
         if (result.IsFailure)
         {

@@ -19,7 +19,7 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
             .ToListAsync(cancellationToken);
         
         var users = userEntites
-            .Select(u => User.Create(u.Id, u.Name, u.Email, u.Department).user)
+            .Select(u => User.Assebmle(u.Id, u.Name, u.Email, u.Department))
             .ToList();
 
         return users;
@@ -52,11 +52,12 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
         if (userEntity == null)
             return null;
         
-        var user = User.Create(
+        var user = User.Assebmle(
             userEntity.Id,
             userEntity.Name, 
             userEntity.Email,
-            userEntity.Department).user;
+            userEntity.Department);
+        
         
         return user;
     }

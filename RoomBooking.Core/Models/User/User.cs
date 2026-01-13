@@ -1,4 +1,6 @@
-﻿namespace RoomBooking.Core.Models.User;
+﻿using RoomBooking.Core.Results;
+
+namespace RoomBooking.Core.Models.User;
 
 public class User
 {
@@ -19,8 +21,8 @@ public class User
     
     public List<Booking.Booking> Bookings { get; set; }
 
-    public static (User user, string? error) Create
-        (Guid id, string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
+    public static Result<User> Create
+        ( string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
         string error = string.Empty;
         // if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(department))
@@ -28,14 +30,14 @@ public class User
 
         var user = new User
         (
-            id: id,
+            id: Guid.NewGuid(),
             name: name,
             email: email,
             department: department,
             bookings: bookings
         );
         
-        return (user, error);
+        return Result<User>.Success(user);
     }
 
     public AddressInfo AddAddressInfo
@@ -49,5 +51,17 @@ public class User
         
         return addressInfo;
     }
-    
+
+    public static User Assebmle(Guid id, string name, string email, string department)
+    {
+        var user = new User
+        (
+            id: Guid.NewGuid(),
+            name: name,
+            email: email,
+            department: department
+        );
+        
+        return user;
+    }
 }
