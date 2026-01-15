@@ -23,12 +23,9 @@ public class Booking
     public static (Booking booking, List<Error>? errors) 
         Create(Guid bookingId, Guid roomId, Guid userId, DateTime startDate, DateTime endDate, string? purpose = "")
     {
-        List<Error>? errors = null;
-        // if (userId == Guid.Empty || roomId == Guid.Empty || userId == roomId)
-        //     errors?.Add(BookingErrors.InvalidIDs);
-        // if(startDate == DateTime.MinValue || endDate == DateTime.MinValue || startDate < endDate || startDate - endDate > MaxDiff
-        //    || startDate == endDate)
-        //     error = "Date time is invalid";
+        List<Error> errors = new List<Error>();
+
+        
         
         var booking = new Booking(bookingId, roomId, userId, startDate, endDate, purpose);
 

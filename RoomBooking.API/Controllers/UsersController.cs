@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.Contracts.UserContracts;
 using RoomBooking.API.FailureHandlers;
+using RoomBooking.Application.DTOs.User;
 using RoomBooking.Core.Abstractions.Services;
 
 namespace RoomBooking.API.Controllers;
@@ -66,20 +67,14 @@ public class UsersController : ControllerBase
 
     [HttpPost("create-user")]
     [EnableRateLimiting("fixed-by-ip")] // For creation | spam protection
-    public async Task<ActionResult<Guid>> CreateUser([FromBody] UserRequest userRequest,
+    public async Task<ActionResult<Guid>> CreateUser([FromBody] UserCreateDto userCreateDto,
         CancellationToken cancellationToken)
     {
-        var userResult = Core.Models.User.User.Create(
-             userRequest.Name,
-             userRequest.Email,
-            userRequest.Department);
-
-        if (userResult.IsFailure)
-        {
-            return BadRequest(userResult.Errors);
-        }
-
-        var result = await _userService.CreateUser(userResult.Value, cancellationToken);
+        var result = await _userService.CreateUser(
+            userCreateDto.Name,
+            userCreateDto.Email,
+            userCreateDto.Department,
+            cancellationToken);
 
         if (result.IsFailure)
         {
@@ -93,14 +88,14 @@ public class UsersController : ControllerBase
 
     [HttpPut("{id:guid}")]
     [EnableRateLimiting("fixed-by-ip")] //for updates
-    public async Task<ActionResult<Guid>> UpdateUser(Guid id, [FromBody] UserRequest userRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> UpdateUser(Guid id, [FromBody] UserUpdateDto userUpdateDto, CancellationToken cancellationToken)
     {
         
         var result = await _userService.UpdateUser(
             id,
-            userRequest.Name,
-            userRequest.Email,
-            userRequest.Department,
+            userUpdateDto.Name,
+            userUpdateDto.Email,
+            userUpdateDto.Department,
             cancellationToken);
 
         if (result.IsFailure)
@@ -168,4 +163,11 @@ public class UsersController : ControllerBase
         
         return Ok(affectedRows);
     }
+
+    // [HttpDelete]
+    // [EnableRateLimiting("concurrency-by-ip")]
+    // public async Task<ActionResult<int>> DeleteAddUsers(CancellationToken cancellationToken)
+    // {
+    //     return Ok( await _userService.DeleteAllUsers(cancellationToken));
+    // }
 }

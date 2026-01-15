@@ -1,4 +1,5 @@
 ﻿using RoomBooking.Core.Results;
+using RoomBooking.Core.Results.Errors;
 
 namespace RoomBooking.Core.Models.User;
 
@@ -24,10 +25,8 @@ public class User
     public static Result<User> Create
         ( string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
-        string error = string.Empty;
-        // if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(department))
-        //     error = "Invalid name or email or department";
-
+        //possible basic validation
+        
         var user = new User
         (
             id: Guid.NewGuid(),
@@ -56,7 +55,7 @@ public class User
     {
         var user = new User
         (
-            id: Guid.NewGuid(),
+            id: id,
             name: name,
             email: email,
             department: department

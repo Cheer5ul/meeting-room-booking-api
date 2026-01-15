@@ -18,4 +18,6 @@ public interface IUserRepository
     Task<ITuple> AddAddressInfo(
         Guid id, string street, string city, string state, string postalCode, string country,
         CancellationToken cancellationToken = default);
+
+    Task<int> DeleteAll(CancellationToken cancellationToken = default);
 }

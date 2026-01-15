@@ -1,8 +1,8 @@
 ﻿namespace RoomBooking.Application.DTOs.User;
 
-public class UserUpdateDto
+public class UserCreateDto
 {
-    public UserUpdateDto(string name, string email, string department)
+    public UserCreateDto(string name, string email, string department)
     {
         Name = name;
         Email = email;

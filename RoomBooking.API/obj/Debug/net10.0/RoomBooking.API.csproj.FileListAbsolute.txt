@@ -154,3 +154,5 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\Serilog.Sinks
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260106.json
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260109.json
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260112.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260113.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260115.json

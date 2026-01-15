@@ -45,14 +45,21 @@ public class UserService(
         return user;
     }
 
-    public async Task<Result<Guid>> CreateUser(User user, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> CreateUser(
+        string name, string email, string department,
+        CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Creating new user. Name: {@UserName}, Email: {@UserEmail}",
-            nameof(CreateUser), user.Name, user.Email);
+            nameof(CreateUser), name, email);
         
-        var validationResult = userCreationValidator.Validate(instance: user);
+        var user = User.Create(name, email, department);
+        
+        if(user.IsFailure)
+            return Result<Guid>.Failures(user.Errors);
+        
+        var validationResult = userCreationValidator.Validate(user.Value!);
 
-        bool isEmailUsed = await userEmailValidator.IsEmailAlreadyUsed(user.Email, cancellationToken);
+        bool isEmailUsed = await userEmailValidator.IsEmailAlreadyUsed(user.Value!.Email, cancellationToken);
 
         if (!validationResult.IsValid || isEmailUsed)
         {
@@ -68,7 +75,7 @@ public class UserService(
 
         try
         {
-            var userId = await userRepository.Create(user, cancellationToken);
+            var userId = await userRepository.Create(user.Value, cancellationToken);
             logger.LogInformation("{@MethodName}: User created successfully: UserId: {@UserId}",
                 nameof(CreateUser), userId);
             return userId;
@@ -91,7 +98,7 @@ public class UserService(
         var canUpdate = await userGettingValidator.IsUserExists(id, cancellationToken);
 
         var userUpdateDto = new UserUpdateDto(name, email, department);
-
+        
         var validationResult = userUpdateValidator.Validate(userUpdateDto);
         
         if (!canUpdate || !validationResult.IsValid)
@@ -107,15 +114,19 @@ public class UserService(
                    nameof(UpdateUser), id);
                errors.Add(UserErrors.UserNotFound);
            }
-                
             
             return Result<ITuple>.Failures(errors);
         }
         
-        var affectedRows = await userRepository.Update(id, name, email, department, cancellationToken);
+        var affectedRows = await userRepository.Update(
+            id,
+            userUpdateDto.Name,
+            userUpdateDto.Email,
+            userUpdateDto.Department,
+            cancellationToken);
 
-        logger.LogInformation("{@MethodName}: Updating user {@UserId}. New values - Name: {@UserName}, Department: {@Department}", 
-            nameof(UpdateUser), id, name, department);
+        logger.LogInformation("{@MethodName}: Updating user {@UserId}",
+            nameof(UpdateUser), id);
 
         return Result<ITuple>.Success(affectedRows);
     }
@@ -196,5 +207,10 @@ public class UserService(
         {
             throw new NotFoundException($"User with id {id} not found");
         }
+    }
+
+    public async Task<int> DeleteAllUsers(CancellationToken cancellationToken = default)
+    {
+        return await userRepository.DeleteAll(cancellationToken);
     }
 }

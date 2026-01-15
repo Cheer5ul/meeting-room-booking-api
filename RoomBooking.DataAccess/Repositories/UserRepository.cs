@@ -130,4 +130,10 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
         
         return (street, city, state, postalCode, country);
     }
+
+    public async Task<int> DeleteAll(CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Users
+            .ExecuteDeleteAsync(cancellationToken);
+    }
 }
