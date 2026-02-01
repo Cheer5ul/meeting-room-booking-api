@@ -31,6 +31,11 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasForeignKey(x => x.UserId) //implicitly showing foreign key
             .OnDelete(DeleteBehavior.Cascade); // Cascade Delete behavior
 
+        builder
+            .Property(x => x.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(500);
+
         builder.OwnsOne(x => x.AddressInfo, address =>
         {
             address.Property(x => x.Street).HasMaxLength(100);

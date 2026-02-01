@@ -10,6 +10,7 @@ using RoomBooking.Core.Models.User;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 using RoomBooking.Application.DTOs.User;
+using RoomBooking.Application.Interfaces.Auth.Hashers;
 using RoomBooking.Application.Validations.Abstractions.Validators;
 using RoomBooking.Application.Validations.Validators.Users;
 using RoomBooking.DataAccess.Exceptions;
@@ -25,7 +26,8 @@ public class UserService(
     IValidator<User> userCreationValidator,
     IValidator<UserUpdateDto> userUpdateValidator,
     IValidator<AddresInfoAddingDto>  addressInfoDtoValidator,
-    IValidationToErrorConverter toErrorConverter) : IUserService
+    IValidationToErrorConverter toErrorConverter,
+    IUserPasswordHasher userPasswordHasher) : IUserService
 {
     public async Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken = default)
     {
@@ -46,13 +48,15 @@ public class UserService(
     }
 
     public async Task<Result<Guid>> CreateUser(
-        string name, string email, string department,
+        string name, string email, string department, string password,
         CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Creating new user. Name: {@UserName}, Email: {@UserEmail}",
             nameof(CreateUser), name, email);
+
+        var hashedPassword = userPasswordHasher.Generate(password);
         
-        var user = User.Create(name, email, department);
+        var user = User.Create(name, email, department, hashedPassword);
         
         if(user.IsFailure)
             return Result<Guid>.Failures(user.Errors);

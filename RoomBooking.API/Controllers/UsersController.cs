@@ -74,6 +74,7 @@ public class UsersController : ControllerBase
             userCreateDto.Name,
             userCreateDto.Email,
             userCreateDto.Department,
+            userCreateDto.Password,
             cancellationToken);
 
         if (result.IsFailure)

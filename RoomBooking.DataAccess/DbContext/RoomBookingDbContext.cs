@@ -34,7 +34,8 @@ public class RoomBookingDbContext : Microsoft.EntityFrameworkCore.DbContext
     // {
     //     if (!optionsBuilder.IsConfigured)
     //     {
-    //         var connectionString =;
+    //         var connectionString =
+    //             ;
     //
     //         if (string.IsNullOrEmpty(connectionString))
     //         {

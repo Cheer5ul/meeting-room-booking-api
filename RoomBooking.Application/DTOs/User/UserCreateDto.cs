@@ -2,7 +2,7 @@
 
 public class UserCreateDto
 {
-    public UserCreateDto(string name, string email, string department)
+    public UserCreateDto(string name, string email, string department, string password)
     {
         Name = name;
         Email = email;
@@ -11,4 +11,5 @@ public class UserCreateDto
     public string Name { get; private set; }
     public string Email { get; private set; }
     public string Department { get; private set; }
+    public string Password { get; private set; }
 }
