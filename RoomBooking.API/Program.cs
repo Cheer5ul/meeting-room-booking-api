@@ -239,3 +239,6 @@ app.MapControllers();/*.RequireRateLimiting("fixed");*/
 
 logger.LogInformation("---------------------------RoomBooking API started---------------------------");
 app.Run();
+
+
+// test auth
