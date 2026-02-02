@@ -36,7 +36,7 @@ public class RoomBookingDbContext : Microsoft.EntityFrameworkCore.DbContext
     //     {
     //         var connectionString =
     //             ;
-    //
+    // 
     //         if (string.IsNullOrEmpty(connectionString))
     //         {
     //             throw new InvalidOperationException(
