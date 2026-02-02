@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "BCrypt.Net-Next/4.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/BCrypt.Net-Next.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/BCrypt.Net-Next.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "FluentValidation/12.1.1": {
         "type": "package",
         "compile": {
@@ -1648,10 +1661,55 @@
         "runtime": {
           "bin/placeholder/RoomBooking.DataAccess.dll": {}
         }
+      },
+      "RoomBooking.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
+          "RoomBooking.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/RoomBooking.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RoomBooking.Infrastructure.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "BCrypt.Net-Next/4.0.3": {
+      "sha512": "W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
+      "type": "package",
+      "path": "bcrypt.net-next/4.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bcrypt.net-next.4.0.3.nupkg.sha512",
+        "bcrypt.net-next.nuspec",
+        "ico.png",
+        "lib/net20/BCrypt.Net-Next.dll",
+        "lib/net20/BCrypt.Net-Next.xml",
+        "lib/net35/BCrypt.Net-Next.dll",
+        "lib/net35/BCrypt.Net-Next.xml",
+        "lib/net462/BCrypt.Net-Next.dll",
+        "lib/net462/BCrypt.Net-Next.xml",
+        "lib/net472/BCrypt.Net-Next.dll",
+        "lib/net472/BCrypt.Net-Next.xml",
+        "lib/net48/BCrypt.Net-Next.dll",
+        "lib/net48/BCrypt.Net-Next.xml",
+        "lib/net5.0/BCrypt.Net-Next.dll",
+        "lib/net5.0/BCrypt.Net-Next.xml",
+        "lib/net6.0/BCrypt.Net-Next.dll",
+        "lib/net6.0/BCrypt.Net-Next.xml",
+        "lib/netstandard2.0/BCrypt.Net-Next.dll",
+        "lib/netstandard2.0/BCrypt.Net-Next.xml",
+        "lib/netstandard2.1/BCrypt.Net-Next.dll",
+        "lib/netstandard2.1/BCrypt.Net-Next.xml",
+        "readme.md"
+      ]
+    },
     "FluentValidation/12.1.1": {
       "sha512": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw==",
       "type": "package",
@@ -4864,6 +4922,11 @@
       "type": "project",
       "path": "../RoomBooking.DataAccess/RoomBooking.DataAccess.csproj",
       "msbuildProject": "../RoomBooking.DataAccess/RoomBooking.DataAccess.csproj"
+    },
+    "RoomBooking.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../RoomBooking.Infrastructure/RoomBooking.Infrastructure.csproj",
+      "msbuildProject": "../RoomBooking.Infrastructure/RoomBooking.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4874,6 +4937,7 @@
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.0",
       "RoomBooking.Application >= 1.0.0",
       "RoomBooking.DataAccess >= 1.0.0",
+      "RoomBooking.Infrastructure >= 1.0.0",
       "Serilog.AspNetCore >= 10.0.0",
       "Serilog.Sinks.Console >= 6.1.1",
       "Serilog.Sinks.File >= 7.0.0",
@@ -4917,6 +4981,9 @@
             },
             "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
               "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj"
+            },
+            "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj": {
+              "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj"
             }
           }
         }

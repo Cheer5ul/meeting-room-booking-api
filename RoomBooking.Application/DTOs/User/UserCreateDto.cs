@@ -7,6 +7,7 @@ public class UserCreateDto
         Name = name;
         Email = email;
         Department = department;
+        Password = password; 
     }
     public string Name { get; private set; }
     public string Email { get; private set; }

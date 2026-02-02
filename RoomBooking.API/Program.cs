@@ -1,9 +1,11 @@
 using System.Threading.RateLimiting;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.FailureHandlers;
 using RoomBooking.API.Middlewares.ExceptionHandlers;
+using RoomBooking.Application.Interfaces.Auth.Hashers;
 using RoomBooking.Application.Services;
 using RoomBooking.Application.Validations.Abstractions.Rooms;
 using RoomBooking.Application.Validations.Abstractions.Users;
@@ -16,6 +18,7 @@ using RoomBooking.Application.Validations.Validators.Users.AddressInfo;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.DataAccess;
 using RoomBooking.DataAccess.DbContext;
+using RoomBooking.Infrastructure.Hashers;
 using Serilog;
 using Serilog.Events;
 
@@ -54,6 +57,9 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+
+//Hashing
+builder.Services.AddScoped<IUserPasswordHasher, UserPasswordHasher>();
 
 //Custom validators
 builder.Services.AddScoped<IRoomGettingValidator, RoomGettingValidator>();

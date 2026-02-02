@@ -13,6 +13,7 @@ public class User
         Name = name;
         Email = email;
         Department = department;
+        PasswordHash = passwordHash;
         Bookings = bookings ?? [];
     }
     public Guid Id { get; }

@@ -14,6 +14,7 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.0",
           "RoomBooking.Application": "1.0.0",
           "RoomBooking.DataAccess": "1.0.0",
+          "RoomBooking.Infrastructure": "1.0.0",
           "Serilog.AspNetCore": "10.0.0",
           "Serilog.Sinks.Console": "6.1.1",
           "Serilog.Sinks.File": "7.0.0",
@@ -21,6 +22,14 @@
         },
         "runtime": {
           "RoomBooking.API.dll": {}
+        }
+      },
+      "BCrypt.Net-Next/4.0.3": {
+        "runtime": {
+          "lib/net6.0/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "4.0.3.0",
+            "fileVersion": "4.0.3.0"
+          }
         }
       },
       "FluentValidation/12.1.1": {
@@ -821,6 +830,18 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "RoomBooking.Infrastructure/1.0.0": {
+        "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
+          "RoomBooking.Application": "1.0.0"
+        },
+        "runtime": {
+          "RoomBooking.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -829,6 +850,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BCrypt.Net-Next/4.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
+      "path": "bcrypt.net-next/4.0.3",
+      "hashPath": "bcrypt.net-next.4.0.3.nupkg.sha512"
     },
     "FluentValidation/12.1.1": {
       "type": "package",
@@ -1198,6 +1226,11 @@
       "sha512": ""
     },
     "RoomBooking.DataAccess/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RoomBooking.Infrastructure/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

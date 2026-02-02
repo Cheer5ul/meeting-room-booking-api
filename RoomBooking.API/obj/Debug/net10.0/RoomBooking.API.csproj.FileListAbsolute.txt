@@ -157,3 +157,7 @@ D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260113.json
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260115.json
 D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260201.json
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\BCrypt.Net-Next.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\RoomBooking.Infrastructure.dll
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\RoomBooking.Infrastructure.pdb
+D:\RiderProjects\RoomBooking.API\RoomBooking.API\bin\Debug\net10.0\logs\dev\log-20260202.json
