@@ -1,42 +1,44 @@
-﻿using RoomBooking.Core.Models;
-
-namespace RoomBooking.Core.Results.Errors;
+﻿namespace RoomBooking.Core.Results.Errors;
 
 public static class UserErrors
 {
-    public static readonly Error UserNotFound = new (
+    public static Error UserNotFound => new (
         "User.UserNotFound",
         "User does not exist.");
 
-    public static readonly Error NameExceedsCharacterAmount = new (
+    public static Error NameExceedsCharacterAmount => new (
         "User.NameExceedsCharacterAmount",
         "Name exceeds character amount");
-    public static readonly Error InvalidEmail = new(
+    public static Error InvalidEmail => new(
         "User.InvalidEmail",
         "Invalid email format");
 
-    public static readonly Error TooShortDepartmentName = new(
+    public static Error TooShortDepartmentName => new(
         "User.TooShortDepartmentName",
         "Department name is too short");
 
-    public static readonly Error TooLongDepartmentName = new(
+    public static Error TooLongDepartmentName => new(
         "User.TooLongDepartmentName",
         "Department name is too long");
     
-    public static readonly Error EmailRequired = new(
+    public static Error EmailRequired => new(
         "User.EmailRequired",
         "Email is required");
     
-    public static readonly Error NameRequired = new(
+    public static Error NameRequired => new(
         "User.NameRequired",
         "Name is required");
     
-    public static readonly Error DepartmentRequired = new(
+    public static Error DepartmentRequired => new(
         "User.DepartmentRequired",
         "Department is required");
 
-    public static readonly Error EmailAlreadyUsed = new(
-        "User.EmailAlreadyUser",
+    public static Error EmailAlreadyUsed => new(
+        "User.EmailAlreadyUsed",
         "Email is already in use");
+
+    public static Error IncorrectPassword => new(
+        "User.IncorrectPassword",
+        "Incorrect password");
 
 }

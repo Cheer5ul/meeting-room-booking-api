@@ -11,8 +11,8 @@ using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 using RoomBooking.Application.DTOs.User;
 using RoomBooking.Application.Interfaces.Auth.Hashers;
+using RoomBooking.Application.Interfaces.Auth.Providers;
 using RoomBooking.Application.Validations.Abstractions.Validators;
-using RoomBooking.Application.Validations.Validators.Users;
 using RoomBooking.DataAccess.Exceptions;
 
 
@@ -27,7 +27,8 @@ public class UserService(
     IValidator<UserUpdateDto> userUpdateValidator,
     IValidator<AddresInfoAddingDto>  addressInfoDtoValidator,
     IValidationToErrorConverter toErrorConverter,
-    IUserPasswordHasher userPasswordHasher) : IUserService
+    IUserPasswordHasher userPasswordHasher,
+    IJwtProvider jwtProvider) : IUserService
 {
     public async Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken = default)
     {
@@ -91,6 +92,33 @@ public class UserService(
                 nameof(CreateUser), exception);
             return Result<Guid>.Failures([UserErrors.EmailAlreadyUsed]);
         }
+    }
+
+    public async Task<Result<string>> Login(string email, string password, 
+        CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation("{@MethodName}: Attempting to login user with email {@UserEmail}",
+            nameof(Login), email);
+        User? user = await userRepository.GetByEmail(email, cancellationToken);
+
+        if (user == null)
+        {
+            logger.LogInformation("User with email {@Email} was not found", email);
+            return Result<string>.Failures([UserErrors.UserNotFound]);
+        }
+
+        var result = userPasswordHasher.Verify(password, user.PasswordHash);
+
+        if (result == false)
+        {
+            logger.LogInformation("Invalid login attempt with email {@Email}, Incorrect password", email);
+            return Result<string>.Failures([UserErrors.IncorrectPassword]);
+        }
+        
+        //creating a jwt token
+        string token = jwtProvider.GenerateToken(user);
+
+        return token;
     }
 
     public async Task<Result<ITuple>> UpdateUser(Guid id, string name, string email, string department, 

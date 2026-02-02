@@ -63,6 +63,27 @@ public class UserRepository(RoomBookingDbContext dbContext) : IUserRepository
         return user;
     }
 
+    public async Task<User?> GetByEmail(string email, CancellationToken cancellationToken = default)
+    {
+        var userEntity = await dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+
+        if (userEntity == null)
+        {
+            return null;
+        }
+        
+        var user = User.Assebmle(
+            userEntity.Id,
+            userEntity.Name,
+            userEntity.Email,
+            userEntity.Department,
+            userEntity.PasswordHash);
+        
+        return user;
+    }
+
     public async Task<Guid> Create(User user, CancellationToken cancellationToken = default)
     {
         var userEntity = new UserEntity
