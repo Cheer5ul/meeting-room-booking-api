@@ -1,5 +1,6 @@
 using System.Threading.RateLimiting;
 using FluentValidation;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.FailureHandlers;
@@ -22,6 +23,7 @@ using RoomBooking.Infrastructure.Hashers;
 using RoomBooking.Infrastructure.Providers;
 using Serilog;
 using Serilog.Events;
+using RoomBooking.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,8 @@ builder.Services.AddProblemDetails(configure =>
 
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddApiExtensions(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -247,6 +251,16 @@ app.UseHttpsRedirection();
 
 app.UseRateLimiter(); //turning on the rate limiter
 
+//authentication middleware for security
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});
+
+//Authentication middlewares
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();/*.RequireRateLimiting("fixed");*/

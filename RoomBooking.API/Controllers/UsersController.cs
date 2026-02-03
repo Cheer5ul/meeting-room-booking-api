@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomBooking.API.Contracts.UserContracts;
 using RoomBooking.API.FailureHandlers;
@@ -19,6 +21,7 @@ public class UsersController : ControllerBase
         _failureHandler = failureHandler;
     }
 
+    [Authorize]
     [HttpGet]
     [EnableRateLimiting("token-by-ip")] //for lists, burst is allowed
     public async Task<ActionResult<List<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
@@ -41,6 +44,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize]
     [HttpGet("{id:guid}")]
     [EnableRateLimiting("fixed-by-ip")] //for single requests strict limit
     public async Task<ActionResult<UserResponse>> GetUserById(Guid id, CancellationToken cancellationToken)
@@ -67,14 +71,14 @@ public class UsersController : ControllerBase
 
     [HttpPost("create-user")]
     [EnableRateLimiting("fixed-by-ip")] // For creation | spam protection
-    public async Task<ActionResult<Guid>> CreateUser([FromBody] UserCreateDto userCreateDto,
+    public async Task<ActionResult<Guid>> CreateUser([FromBody] UserCreationRequest userCreationRequest,
         CancellationToken cancellationToken)
-    {
+        {
         var result = await _userService.CreateUser(
-            userCreateDto.Name,
-            userCreateDto.Email,
-            userCreateDto.Department,
-            userCreateDto.Password,
+            userCreationRequest.Name,
+            userCreationRequest.Email,
+            userCreationRequest.Department,
+            userCreationRequest.Password,
             cancellationToken);
 
         if (result.IsFailure)
@@ -87,6 +91,34 @@ public class UsersController : ControllerBase
         return Ok(successfulUser);
     }
 
+    [HttpPost("login")]
+    [EnableRateLimiting("fixed-by-ip")]
+    public async Task<ActionResult<string>> Login([FromBody] UserLoginRequest userLoginRequest,
+        CancellationToken cancellationToken)
+    {
+        var token = await _userService.Login(userLoginRequest.Email, userLoginRequest.Password, cancellationToken);
+
+        if (token.IsFailure)
+        {
+            return _failureHandler.HandleFailure(token, HttpContext);
+        }
+        
+        //saving a token to cookies 
+        HttpContext.Response.Cookies.Append("my-cookies", token.Value!);
+        
+        return Ok(token.Value);
+    }
+
+    [HttpPost("logout")]
+    [EnableRateLimiting("fixed-by-ip")]
+    public async Task<ActionResult> LogOut([FromBody] CancellationToken cancellationToken)
+    {
+        HttpContext.Response.Cookies.Delete("my-cookies");
+
+        return Ok();
+    }
+
+    [Authorize]
     [HttpPut("{id:guid}")]
     [EnableRateLimiting("fixed-by-ip")] //for updates
     public async Task<ActionResult<Guid>> UpdateUser(Guid id, [FromBody] UserUpdateDto userUpdateDto, CancellationToken cancellationToken)
@@ -116,6 +148,7 @@ public class UsersController : ControllerBase
         return Ok(rowsAffected);
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult<Guid>> DeleteUser(Guid id, CancellationToken cancellationToken)
@@ -132,6 +165,7 @@ public class UsersController : ControllerBase
         return Ok(successfulUser);
     }
 
+    [Authorize]
     [HttpPost("add-user-address")]
     [EnableRateLimiting("concurrency-by-ip")] //for db operations | Protects db from too many connections
     public async Task<ActionResult<Guid>> AddUserAddressInfo(Guid id, [FromBody] UserAddressInfoRequest addressInfoRequest,
