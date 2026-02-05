@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Ki/fiqKKFio=",
+  "dgSpecHash": "RPMjPoeanLU=",
   "success": true,
-  "projectFilePath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj",
+  "projectFilePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\oxyge\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.1.1\\fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",

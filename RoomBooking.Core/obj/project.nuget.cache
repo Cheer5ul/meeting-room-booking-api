@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1peam1LZeEc=",
+  "dgSpecHash": "SLUII9uzBa4=",
   "success": true,
-  "projectFilePath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+  "projectFilePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

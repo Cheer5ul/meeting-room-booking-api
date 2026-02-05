@@ -104,14 +104,21 @@ public class UsersController : ControllerBase
         }
         
         //saving a token to cookies 
-        HttpContext.Response.Cookies.Append("my-cookies", token.Value!);
+        HttpContext.Response.Cookies.Append("my-cookies", token.Value!, 
+            new CookieOptions()
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
         
         return Ok(token.Value);
     }
 
+    [Authorize]
     [HttpPost("logout")]
     [EnableRateLimiting("fixed-by-ip")]
-    public async Task<ActionResult> LogOut([FromBody] CancellationToken cancellationToken)
+    public async Task<ActionResult> LogOut(CancellationToken cancellationToken)
     {
         HttpContext.Response.Cookies.Delete("my-cookies");
 

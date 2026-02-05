@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {}
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {}
   },
   "projects": {
-    "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
         "projectName": "RoomBooking.Core",
-        "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
         "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
-        "outputPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\obj\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -69,14 +69,14 @@
         }
       }
     },
-    "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
         "projectName": "RoomBooking.DataAccess",
-        "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
         "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
-        "outputPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\obj\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -97,8 +97,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
-                "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj"
+              "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj"
               }
             }
           }

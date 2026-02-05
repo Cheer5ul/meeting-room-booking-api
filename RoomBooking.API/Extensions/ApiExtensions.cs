@@ -21,8 +21,10 @@ public static class ApiExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = false, //issuer validation
-                    ValidateAudience = false, // getter/audience validation
+                    ValidateIssuer = true, //issuer validation
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidateAudience = true, // getter/audience validation
+                    ValidAudience = jwtOptions.Audience,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true, // issuer secret key
                     IssuerSigningKey = new SymmetricSecurityKey(
@@ -34,7 +36,11 @@ public static class ApiExtensions
                  {
                      OnMessageReceived = context =>
                      {
-                         context.Token = context.Request.Cookies["my-cookies"];
+                         var token = context.Request.Cookies["my-cookies"];
+                         if (!string.IsNullOrWhiteSpace(token))
+                         {
+                             context.Token = token;
+                         }
 
                          return Task.CompletedTask;
                      }

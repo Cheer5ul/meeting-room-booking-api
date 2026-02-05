@@ -1853,11 +1853,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
+      "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
       "projectName": "RoomBooking.Infrastructure",
-      "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
-      "outputPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\obj\\",
+      "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1878,8 +1878,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
-              "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj"
+            "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
+              "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj"
             }
           }
         }

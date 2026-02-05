@@ -5259,11 +5259,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
       "projectName": "RoomBooking.API",
-      "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
       "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
-      "outputPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.API\\obj\\",
+      "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5284,14 +5284,14 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
-              "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj"
+            "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
+              "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj"
             },
-            "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
-              "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj"
+            "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
+              "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj"
             },
-            "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj": {
-              "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj"
+            "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj": {
+              "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj"
             }
           }
         }

@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+      "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
       "projectName": "RoomBooking.Core",
-      "projectPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
       "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
-      "outputPath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.Core\\obj\\",
+      "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
