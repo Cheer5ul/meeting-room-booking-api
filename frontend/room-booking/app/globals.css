@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+  padding-top: 30px;
+  gap: 30px 20px;
+}
+
+.card__price {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.card__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.room__model {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card__title { 
+  margin-right: 20px;
+  max-width: 80%;
+  white-space: normal;
+}
