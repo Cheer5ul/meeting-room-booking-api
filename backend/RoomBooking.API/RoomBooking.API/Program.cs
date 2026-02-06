@@ -265,8 +265,13 @@ app.UseAuthorization();
 
 app.MapControllers();/*.RequireRateLimiting("fixed");*/
 
+//CORS policy
+app.UseCors(x =>
+{
+    x.WithHeaders().AllowAnyHeader();
+    x.WithOrigins("http://localhost:3000");
+    x.WithMethods().AllowAnyMethod();
+});
+
 logger.LogInformation("---------------------------RoomBooking API started---------------------------");
 app.Run();
-
-
-// test auth

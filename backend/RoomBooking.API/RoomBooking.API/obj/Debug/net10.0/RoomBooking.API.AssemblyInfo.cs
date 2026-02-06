@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RoomBooking.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d95a7bd5e5592ec6dcc2dea36a88ccca6e66fb5f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30d001bf39b37e92b5e04725ccdcf428e9120c6e")]
 [assembly: System.Reflection.AssemblyProductAttribute("RoomBooking.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RoomBooking.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
