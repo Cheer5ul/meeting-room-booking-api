@@ -13,7 +13,6 @@ export const getAllRooms = async() => {
 }
 
 // mehtods to interract with the API
-
 export const createRoom = async(roomRequest: RoomRequest) => {
     await fetch("http://localhost:5211/api/rooms", {
         method: "POST",
