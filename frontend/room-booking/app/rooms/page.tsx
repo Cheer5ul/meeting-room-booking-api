@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { getAllRooms} from "../services/rooms";
 import { useState } from "react";
 import { Rooms } from "../components/Rooms";
+import Title from "antd/es/skeleton/";
+import { CreateUpdateRoom } from "../components/CreateUpdateRoom";
 
 export default function RoomsPage() {
     const[rooms, setRooms] = useState<Room[]>([]);
@@ -24,7 +26,9 @@ export default function RoomsPage() {
         <div>
             <Button>Add Room</Button>
 
-            <Rooms rooms={rooms}/>
+            
+
+            {loading ? <Title>Loading rooms...</Title>: (<Rooms rooms= {rooms}/>)}
         </div>
     );
 }
