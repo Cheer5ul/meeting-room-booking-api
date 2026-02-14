@@ -21,9 +21,9 @@ public static class ApiExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true, //issuer validation
+                    ValidateIssuer = false, //issuer validation
                     ValidIssuer = jwtOptions.Issuer,
-                    ValidateAudience = true, // getter/audience validation
+                    ValidateAudience = false, // getter/audience validation
                     ValidAudience = jwtOptions.Audience,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true, // issuer secret key
@@ -42,6 +42,16 @@ public static class ApiExtensions
                              context.Token = token;
                          }
 
+                         return Task.CompletedTask;
+                     },
+                     
+                     OnAuthenticationFailed = context =>
+                     {
+                         var ex = context.Exception;
+                         return Task.CompletedTask;
+                     },
+                     OnTokenValidated = context =>
+                     {
                          return Task.CompletedTask;
                      }
                  };

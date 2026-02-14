@@ -7,7 +7,7 @@ namespace RoomBooking.Application.Validations.Validators.Users.AddressInfo;
 // {
 //     Task<bool> ValidateAsync(AddressInfo addressInfo);
 // }
-public sealed class AddressInfoAddingDtoValidator : AbstractValidator<AddresInfoAddingDto>
+public sealed class AddressInfoAddingDtoValidator : AbstractValidator<Core.Models.User.AddressInfo>
 {
     public AddressInfoAddingDtoValidator(/*IAddressApi addressApi*/)
     {

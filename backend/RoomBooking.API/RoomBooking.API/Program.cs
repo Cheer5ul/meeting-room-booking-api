@@ -24,6 +24,7 @@ using RoomBooking.Infrastructure.Providers;
 using Serilog;
 using Serilog.Events;
 using RoomBooking.API.Extensions;
+using RoomBooking.Application.Services.User.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -266,12 +267,12 @@ app.UseAuthorization();
 app.MapControllers();/*.RequireRateLimiting("fixed");*/
 
 //CORS policy
-app.UseCors(x =>
-{
-    x.WithHeaders().AllowAnyHeader();
-    x.WithOrigins("http://localhost:3000");
-    x.WithMethods().AllowAnyMethod();
-});
+// app.UseCors(x =>
+// {
+//     x.WithHeaders().AllowAnyHeader();
+//     x.WithOrigins("http://localhost:3000");
+//     x.WithMethods().AllowAnyMethod();
+// });
 
 logger.LogInformation("---------------------------RoomBooking API started---------------------------");
 app.Run();

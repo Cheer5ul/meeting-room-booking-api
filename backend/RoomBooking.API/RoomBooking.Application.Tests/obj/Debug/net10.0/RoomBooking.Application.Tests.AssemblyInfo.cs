@@ -10,10 +10,12 @@
 using System;
 using System.Reflection;
 
+[assembly: Xunit.TestFramework(typeof(Xunit.DependencyInjection.DependencyInjectionTestFramework))]
+[assembly: Xunit.DependencyInjection.StartupType("RoomBooking.Application.Tests.Startup")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("RoomBooking.Application.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8b19ff1586da06c0bbd65373ed28440395eed7a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66891af083deeacf0c359b035d3d65799877bca2")]
 [assembly: System.Reflection.AssemblyProductAttribute("RoomBooking.Application.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RoomBooking.Application.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

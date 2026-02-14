@@ -115,9 +115,9 @@ public class UsersController : ControllerBase
         return Ok(token.Value);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpPost("logout")]
-    [EnableRateLimiting("fixed-by-ip")]
+    // [EnableRateLimiting("fixed-by-ip")]
     public async Task<ActionResult> LogOut(CancellationToken cancellationToken)
     {
         HttpContext.Response.Cookies.Delete("my-cookies");
