@@ -24,7 +24,10 @@ using RoomBooking.Infrastructure.Providers;
 using Serilog;
 using Serilog.Events;
 using RoomBooking.API.Extensions;
+using RoomBooking.Application.DTOs.AddressInfo;
+using RoomBooking.Application.Services.Room;
 using RoomBooking.Application.Services.User.Services;
+using RoomBooking.Core.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,12 +83,15 @@ builder.Services.AddScoped<IUserGettingValidator,  UserGettingValidator>();
 builder.Services.AddScoped<IUserEmailValidator, UserEmailValidator>();
 builder.Services.AddScoped<IValidationToErrorConverter, ValidationToErrorConverter>();
 
+
 //Fluent Validators
 builder.Services.AddValidatorsFromAssemblyContaining<BookingValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UserCreationValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UserUpdateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressInfoAddingDtoValidator>();
+builder.Services.AddScoped<IValidator<AddresInfoAddingDto>, AddressInfoAddingDtoValidator>();
+
 
 builder.Services.AddValidatorsFromAssemblyContaining<RoomCreationValidator>();
 

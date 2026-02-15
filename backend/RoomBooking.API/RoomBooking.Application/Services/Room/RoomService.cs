@@ -4,29 +4,26 @@ using Microsoft.Extensions.Logging;
 using RoomBooking.Application.DTOs.Room;
 using RoomBooking.Application.Validations.Abstractions.Rooms;
 using RoomBooking.Application.Validations.Abstractions.Validators;
-using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
-using RoomBooking.Core.Models;
-using RoomBooking.Core.Models.Room;
 using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 
-namespace RoomBooking.Application.Services;
+namespace RoomBooking.Application.Services.Room;
 
 public class RoomService(IRoomRepository repository,
-    IRoomGettingValidator validator,
-    IValidator<Room> roomCreationValidator,
+    IRoomGettingValidator roomGettingValidator,
+    IValidator<Core.Models.Room.Room> roomCreationValidator,
     IValidator<RoomUpdateDto> roomUpdateDtoValidator,
     ILogger<RoomService> logger,
     IValidationToErrorConverter toErrorConverter) : IRoomService
 {
-    public async Task<Result<List<Room>>> GetAllRooms(CancellationToken cancellationToken = default)
+    public async Task<Result<List<Core.Models.Room.Room>>> GetAllRooms(CancellationToken cancellationToken = default)
     {
         return await repository.Get(cancellationToken);
     }
 
-    public async Task<Result<Room?>> GetRoomById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<Core.Models.Room.Room?>> GetRoomById(Guid id, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Getting room with by {@Id}",
             nameof(GetRoomById), id);
@@ -37,13 +34,13 @@ public class RoomService(IRoomRepository repository,
         {
             logger.LogInformation("Room not found: {@RoomId}",
                 id);
-            return Result<Room?>.Failures([RoomErrors.RoomNotFound]);
+            return Result<Core.Models.Room.Room?>.Failures([RoomErrors.RoomNotFound]);
         }
 
         return room;
     }
 
-    public async Task<Result<Guid>> CreateRoom(Room room, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> CreateRoom(Core.Models.Room.Room room, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("{@MethodName}: Creating a new room: {@Room}",
             nameof(CreateRoom), room);
@@ -71,7 +68,7 @@ public class RoomService(IRoomRepository repository,
     public async Task<Result<ITuple>> UpdateRoom(Guid id, string name, int capacity, bool hasProjector,
         bool hasTv, bool hasWhiteBoard, CancellationToken cancellationToken = default)
     {
-        var canUpdate = await validator.IsExisting(id, cancellationToken);
+        var canUpdate = await roomGettingValidator.IsExisting(id, cancellationToken);
         
         var roomUpdateDto = new RoomUpdateDto(name, capacity, hasProjector, hasTv, hasWhiteBoard);
         
@@ -107,7 +104,7 @@ public class RoomService(IRoomRepository repository,
         logger.LogInformation("{@MethodName}: Attempting to delete room {@UserId}",
             nameof(DeleteRoom), id);
         
-        var canDelete = await validator.IsExisting(id, cancellationToken);
+        var canDelete = await roomGettingValidator.IsExisting(id, cancellationToken);
         
         if (!canDelete)
         {
