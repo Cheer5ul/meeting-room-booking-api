@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RoomBooking.Application.Services.Room;
@@ -7,76 +8,81 @@ using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models.Room;
-using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
-using Xunit;
-using Assert = NUnit.Framework.Assert;
 
 namespace RoomBooking.Application.Tests.DI;
 
 public class RoomServiceTests
 {
-    private readonly IRoomService _roomService;
-    private readonly Mock<IRoomRepository> _roomRepositoryMock;
-    public RoomServiceTests()
+    private const string EXISTING_ROOM_ID = "490fb600-5f7b-4e79-b6ef-40c38d80f6a4"; 
+    
+    // Fabric method (instead of constructor) to isolate each test
+    private (IRoomService roomService, Mock<IRoomRepository> repoMock) CreateSut()
     {
-        //mocking
-        _roomRepositoryMock = new Mock<IRoomRepository>();
+        var repoMock = new Mock<IRoomRepository>();
         var loggerMock = new Mock<ILogger<RoomService>>();
-        
         var validationSettings = Options.Create(new RoomValidationSettings()
         {
             MaximumNameLength = 50
         });
-        
-        // _roomService = serviceProvider.GetRequiredService<IRoomService>();
-        var roomService = new RoomService(_roomRepositoryMock.Object,
-            new RoomGettingValidator(_roomRepositoryMock.Object),
+
+        var service = new RoomService(
+            repoMock.Object,
+            new RoomGettingValidator(repoMock.Object),
             new RoomCreationValidator(validationSettings),
             new RoomUpdateValidator(),
             loggerMock.Object,
             new ValidationToErrorConverter());
         
-        _roomService = roomService;
+        return (service, repoMock);
     }
 
-    [Xunit.Theory]
-    [InlineData("490fb600-5f7b-4e79-b6ef-40c38d80f6a4")]
-    public async Task GetRoomById_Should_ReturnRoomNotFoundError_WhenGettingAnUnexistingRoom(Guid id)
+    [Fact]
+    public async Task GetRoomById_Should_ReturnRoomNotFoundError_WhenGettingAnUnexistingRoom()
     {
         // Arrange
-        _roomRepositoryMock.Setup(r => r.GetById(It.IsAny<Guid>()))
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.Parse(EXISTING_ROOM_ID);
+        
+        repoMock.Setup(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Room?)null);
-        // Act
-        var result = await _roomService.GetRoomById(id, CancellationToken.None);
-        // Assert
-        bool isNotFoundError = result.Errors[0] == RoomErrors.RoomNotFound; 
-        Assert.That(isNotFoundError, Is.True);
         
+        // Act
+        var result = await sut.GetRoomById(id, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.RoomNotFound, result.Errors);
+        repoMock.Verify(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), 
+            Times.Once); // check if repository was used for 1 time 
     }
 
-    [Xunit.Theory]
-    [InlineData("490fb600-5f7b-4e79-b6ef-40c38d80f6a4")]
-    public async Task GetRoomById_Should_ReturnResultRoom(Guid id)
+    [Fact]
+    public async Task GetRoomById_Should_ReturnResultRoom()
     {
         // Arrange
-        string roomName = "telephone booth";
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        var roomName = "telephone booth";
         int roomCapacity = 10;
-        bool hasProjector = false;
-        bool hasTv = false;
-        bool hasWhiteBoard = false;
-        var room = Room.Create(id, roomName, roomCapacity, hasProjector, hasTv, hasWhiteBoard);
-
-        //NEEDS FIXES
-        _roomRepositoryMock.Setup(r => r.GetById(id))
-            .ReturnsAsync(Result.Success());
+        
+        var room = Room.Create(id, roomName, roomCapacity, false, false, false);
+            
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(room.room);
         
         // Act
-        var result = await _roomService.GetRoomById(id, CancellationToken.None);
+        var result = await sut.GetRoomById(id, CancellationToken.None);
         
         // Assert
-        bool isAnyError = result.Errors.Any();
-        Assert.That(isAnyError, Is.False);
+        Assert.False(result.IsFailure);
+        Assert.NotNull(result.Value);
+        Assert.Equal(id, result.Value.Id);
+        Assert.Equal(roomName, result.Value.Name);
+        Assert.Equal(roomCapacity, result.Value.Capacity);
+        
+        repoMock.Verify(r => r.GetById(id, It.IsAny<CancellationToken>()),
+            Times.Once); // check if repository was used for 1 time 
     }
     
     
