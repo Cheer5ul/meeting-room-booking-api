@@ -28,6 +28,14 @@ public class RoomService(IRoomRepository repository,
         logger.LogInformation("{@MethodName}: Getting room with by {@Id}",
             nameof(GetRoomById), id);
         
+        // fast check | maybe should be even in the controller | NEEDS REFACTOR
+        if (id == Guid.Empty)
+        {
+            logger.LogInformation("{@MethodName}: Getting user with an empty id {@UserId}",
+                nameof(GetRoomById), id);
+            return Result<Core.Models.Room.Room?>.Failures([UserErrors.InvalidId]);
+        }
+        
         var room = await repository.GetById(id, cancellationToken);
 
         if (room == null)

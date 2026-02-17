@@ -36,6 +36,7 @@ public class UserService(
 
     public async Task<Result<Core.Models.User.User?>> GetUserById(Guid id, CancellationToken cancellationToken = default)
     {
+        
         logger.LogInformation("{@MethodName}: Getting user by id: {@UserId}", nameof(GetUserById), id);
         var user = await userRepository.GetById(id, cancellationToken);
         

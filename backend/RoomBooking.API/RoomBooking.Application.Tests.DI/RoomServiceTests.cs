@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RoomBooking.Application.Services.Room;
@@ -37,6 +36,54 @@ public class RoomServiceTests
         return (service, repoMock);
     }
 
+    [Fact]
+    public async Task GetRoomById_Should_PassCancellationToken_ToRepository()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        var cts = new CancellationTokenSource();
+        var token = cts.Token;
+
+        repoMock.Setup(r => r.GetById(id, token))
+            .ReturnsAsync((Room?)null);
+
+        // Act
+        await sut.GetRoomById(id, token);
+        
+        // Assert
+        repoMock.Verify(r => r.GetById(id, token), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetRoomById_Should_ThrowException_WhenRepositoryThrows()
+    {
+        //Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        repoMock.Setup(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+        
+       // Act & Assert
+       await Assert.ThrowsAsync<InvalidOperationException>(
+           () => sut.GetRoomById(id, CancellationToken.None));
+    }
+
+    [Fact] //Not to interact with the repo when the input is invalid
+    public async Task GetRoomById_Should_ReturnValidationError_WhenIdIsEmpty()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var emptyId = Guid.Empty;
+        
+        // Act
+        var result = await sut.GetRoomById(emptyId, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        repoMock.Verify(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+    
     [Fact]
     public async Task GetRoomById_Should_ReturnRoomNotFoundError_WhenGettingAnUnexistingRoom()
     {
@@ -84,6 +131,4 @@ public class RoomServiceTests
         repoMock.Verify(r => r.GetById(id, It.IsAny<CancellationToken>()),
             Times.Once); // check if repository was used for 1 time 
     }
-    
-    
 }
