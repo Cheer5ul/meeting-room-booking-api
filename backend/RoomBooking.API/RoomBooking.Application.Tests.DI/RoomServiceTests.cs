@@ -7,6 +7,7 @@ using RoomBooking.Application.Validations.Validators.Rooms;
 using RoomBooking.Core.Abstractions.Repositories;
 using RoomBooking.Core.Abstractions.Services;
 using RoomBooking.Core.Models.Room;
+using RoomBooking.Core.Results;
 using RoomBooking.Core.Results.Errors;
 
 namespace RoomBooking.Application.Tests.DI;
@@ -36,6 +37,8 @@ public class RoomServiceTests
         return (service, repoMock);
     }
 
+    #region GetRoomById
+    
     [Fact]
     public async Task GetRoomById_Should_PassCancellationToken_ToRepository()
     {
@@ -82,6 +85,7 @@ public class RoomServiceTests
         // Assert
         Assert.True(result.IsFailure);
         repoMock.Verify(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+        
     }
     
     [Fact]
@@ -131,4 +135,52 @@ public class RoomServiceTests
         repoMock.Verify(r => r.GetById(id, It.IsAny<CancellationToken>()),
             Times.Once); // check if repository was used for 1 time 
     }
+    #endregion
+
+    #region GetAllRooms
+
+    [Fact]
+    public async Task GetAllRooms_Should_PassCancellationToken_ToRepository()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var cts = new CancellationTokenSource();
+        var token = cts.Token;
+
+        repoMock.Setup(r => r.Get(token))
+            .ReturnsAsync([]);
+
+        // Act
+        await sut.GetAllRooms(token);
+        
+        // Assert
+        repoMock.Verify(r => r.Get(token), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetAllRooms_Should_ReturnResultRooms()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var cts = new CancellationTokenSource();
+        var token = cts.Token;
+        var room1 = Room.Create(Guid.NewGuid(), "Room1", 10, true, true, true);
+        var room2 = Room.Create(Guid.NewGuid(), "Room2", 20, true, true, false);
+        var room3 = Room.Create(Guid.NewGuid(), "Room3", 30, true, false, false);
+
+        var roomsLis = new List<Room>() { room1.room, room2.room, room3.room };
+        
+        repoMock.Setup(r => r.Get(token))
+            .ReturnsAsync(roomsLis);
+        
+        // Act
+        var result = await sut.GetAllRooms(token);
+        
+        // Assert 
+        repoMock.Verify(r => r.Get(token), Times.Once);
+        Assert.NotNull(result);
+        Assert.Equal(roomsLis, result.Value);
+        Assert.False(result.IsFailure);
+    }
+    #endregion
 }

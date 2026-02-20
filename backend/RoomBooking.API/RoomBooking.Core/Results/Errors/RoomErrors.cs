@@ -33,5 +33,7 @@ public static class RoomErrors
     public static readonly Error WhiteBoardInfoRequired = new(
         "Room.WhiteBoardInfoRequired",
         "White board info is required.");
-
+    public static Error InvalidId => new(
+        "User.InvalidId",
+        "Invalid id");
 }

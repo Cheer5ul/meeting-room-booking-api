@@ -33,7 +33,7 @@ public class RoomService(IRoomRepository repository,
         {
             logger.LogInformation("{@MethodName}: Getting user with an empty id {@UserId}",
                 nameof(GetRoomById), id);
-            return Result<Core.Models.Room.Room?>.Failures([UserErrors.InvalidId]);
+            return Result<Core.Models.Room.Room?>.Failures([RoomErrors.InvalidId]);
         }
         
         var room = await repository.GetById(id, cancellationToken);
@@ -117,7 +117,7 @@ public class RoomService(IRoomRepository repository,
         if (!canDelete)
         {
             logger.LogInformation("{@MethodName}: Cannot delete unexisting room: {@Room}",
-                nameof(UpdateRoom), id);
+                nameof(DeleteRoom), id);
             return Result<Guid>.Failures([RoomErrors.RoomNotFound]);
         }
         
