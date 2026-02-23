@@ -63,7 +63,7 @@ public class RoomServiceTests
         var (sut, repoMock) = CreateSut();
         var id = Guid.NewGuid();
         repoMock.Setup(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+            .ThrowsAsync(new InvalidOperationException());
         
        // Act & Assert
        await Assert.ThrowsAsync<InvalidOperationException>(
@@ -194,6 +194,7 @@ public class RoomServiceTests
         
         // Assert
         Assert.Empty(result.Value!);
+        Assert.False(result.IsFailure);
         repoMock.Verify(r => r.Get(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -203,7 +204,7 @@ public class RoomServiceTests
         // Arrange
         var (sut, repoMock) = CreateSut();
         repoMock.Setup(r => r.Get(It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+            .ThrowsAsync(new InvalidOperationException());
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
@@ -241,7 +242,7 @@ public class RoomServiceTests
         var room = Room.Create(Guid.NewGuid(), "Room1", 10, true, true, true);
         
         repoMock.Setup(r => r.Create(room.room, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+            .ThrowsAsync(new InvalidOperationException());
         
         // Act && Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
@@ -361,13 +362,13 @@ public class RoomServiceTests
 
         // for validator to pass
         repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Room.Create(Guid.NewGuid(), "Room1", 10, true, true, true).room);
+            .ReturnsAsync(Room.Create (id, "Room1", 10, true, true, true).room);
         
         repoMock.Setup(r => r.Update(
                         It.IsAny<Guid>(), It.IsAny<string>(),It.IsAny<int>(), 
                 It.IsAny<bool>(),It.IsAny<bool>(), It.IsAny<bool>(), 
             It.IsAny<CancellationToken>()))
-                        .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+                        .ThrowsAsync(new InvalidOperationException());
         
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>( 
@@ -532,7 +533,7 @@ public class RoomServiceTests
         
         repoMock.Setup(r => r.Delete(
                 It.IsAny<Guid>(),It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+            .ThrowsAsync(new InvalidOperationException());
         
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
