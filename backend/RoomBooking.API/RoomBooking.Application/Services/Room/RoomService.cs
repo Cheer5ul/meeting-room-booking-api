@@ -76,20 +76,20 @@ public class RoomService(IRoomRepository repository,
     public async Task<Result<ITuple>> UpdateRoom(Guid id, string name, int capacity, bool hasProjector,
         bool hasTv, bool hasWhiteBoard, CancellationToken cancellationToken = default)
     {
-        var canUpdate = await roomGettingValidator.IsExisting(id, cancellationToken);
+        var isExisting = await roomGettingValidator.IsExisting(id, cancellationToken);
         
         var roomUpdateDto = new RoomUpdateDto(name, capacity, hasProjector, hasTv, hasWhiteBoard);
         
         var validationResult = roomUpdateDtoValidator.Validate(roomUpdateDto);
         
-        if (!canUpdate ||  !validationResult.IsValid)
+        if (!isExisting ||  !validationResult.IsValid)
         {
             logger.LogInformation("{@MethodName}: Room updating failed: {@Room}",
                 nameof(UpdateRoom), id);
             
             var errors = toErrorConverter.ValidationToErrors(validationResult.Errors);
 
-            if (!canUpdate)
+            if (!isExisting)
             {
                 logger.LogInformation("{@MethodName} Room {@RoomId} does not exist",
                     nameof(UpdateRoom), id);

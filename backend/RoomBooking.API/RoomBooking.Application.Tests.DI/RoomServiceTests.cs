@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RoomBooking.Application.Services.Room;
@@ -13,8 +14,6 @@ namespace RoomBooking.Application.Tests.DI;
 
 public class RoomServiceTests
 {
-    private const string EXISTING_ROOM_ID = "490fb600-5f7b-4e79-b6ef-40c38d80f6a4"; 
-    
     // Fabric method (instead of constructor) to isolate each test
     private (IRoomService roomService, Mock<IRoomRepository> repoMock) CreateSut()
     {
@@ -93,7 +92,7 @@ public class RoomServiceTests
     {
         // Arrange
         var (sut, repoMock) = CreateSut();
-        var id = Guid.Parse(EXISTING_ROOM_ID);
+        var id = Guid.NewGuid();
         
         repoMock.Setup(r => r.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Room?)null);
@@ -318,5 +317,268 @@ public class RoomServiceTests
         
         repoMock.Verify(r => r.Create(room.room, It.IsAny<CancellationToken>()), Times.Once);
     }
+    #endregion
+    
+    #region UpdateRoom
+
+    [Fact]
+    public async Task UpdateRoom_Should_PassCancellationToken_ToRepository()
+    {
+        // Arrange 
+        var (sut, repoMock) = CreateSut();
+        var cts = new CancellationTokenSource();
+        var token =  cts.Token;
+        var id = Guid.NewGuid();
+        
+        var room = Room.Create(id, "Room1", 10, true, true, true);
+        var newName = "newName";
+        var newCapacity = 100;
+        var newHasProjector = false;
+        var newHasTv = false;
+        var newHasWhiteBoard = false;
+
+        // for validator to pass
+        repoMock.Setup(r => r.GetById(room.room.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(room.room);
+         
+        repoMock.Setup(r => r.Update(room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard, token))
+            .ReturnsAsync((room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard));
+        
+        // Act 
+        await sut.UpdateRoom(room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard, token);
+        
+        // Assert
+        repoMock.Verify(r => r.Update(room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard, token), 
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateRoom_Should_ThrowException_WhenRepositoryThrows()
+    {
+        // Arrange 
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+
+        // for validator to pass
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(Guid.NewGuid(), "Room1", 10, true, true, true).room);
+        
+        repoMock.Setup(r => r.Update(
+                        It.IsAny<Guid>(), It.IsAny<string>(),It.IsAny<int>(), 
+                It.IsAny<bool>(),It.IsAny<bool>(), It.IsAny<bool>(), 
+            It.IsAny<CancellationToken>()))
+                        .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>( 
+            () => sut.UpdateRoom(id, "NewName", 100, false,false, false,
+            CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task UpdateRoom_Should_ReturnValidationError_WhenRoomNotFound()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id =  Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Room?)null);
+        
+        // Act
+        var result = await sut.UpdateRoom(id, "NewName", 100, false,false, false, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.RoomNotFound, result.Errors);
+        repoMock.Verify(r => r.Update(id, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(),
+            It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateRoom_Should_ReturnValidationError_WhenNewNameTooShort()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id =  Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+        
+        // Act
+        var result = await sut.UpdateRoom(id, "", 100, false,false, false, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.NameRequired, result.Errors);
+        repoMock.Verify(r => r.Update(id, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(),
+            It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateRoom_Should_ReturnValidationError_WhenNewNameTooLong()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id =  Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+        
+        // Act
+        var result = await sut.UpdateRoom(id, 
+            "NewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewNameNewName",
+            100, false,false, false, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.NameTooLong, result.Errors);
+        repoMock.Verify(r => r.Update(id, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(),
+            It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+    
+    [Fact]
+    public async Task UpdateRoom_Should_ReturnValidationError_WhenInvalidCapacity()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+        
+        // Act
+        var result = await sut.UpdateRoom(id, 
+            "NewName",
+            0,false,false, false, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.CapacityGreaterThanZero, result.Errors);
+        repoMock.Verify(r => r.Update(id, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(),
+            It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateRoom_Should_ReturnResultITuple()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+
+        var room = Room.Create(Guid.NewGuid(), "Room1", 10, true, true, true);
+        var newName = "newName";
+        var newCapacity = 100;
+        var newHasProjector = false;
+        var newHasTv = false;
+        var newHasWhiteBoard = false;
+
+        // for validator to pass
+        repoMock.Setup(r => r.GetById(room.room.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(room.room);
+         
+        repoMock.Setup(r => r.Update(room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard, CancellationToken.None))
+            .ReturnsAsync((room.room.Id, newName, newCapacity, newHasProjector, newHasTv, newHasWhiteBoard));
+        
+        // Act
+        var result = await sut.UpdateRoom(room.room.Id, newName,  newCapacity, newHasProjector, newHasTv, newHasWhiteBoard, CancellationToken.None);
+        
+        // Assert
+        Assert.NotNull(result);
+        Assert.False(result.IsFailure);
+        Assert.Empty(result.Errors);
+        repoMock.Verify(r => r.Update(room.room.Id, 
+            It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(),
+            It.IsAny<bool>(), It.IsAny<bool>(), 
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+    
+    #endregion
+    
+    #region DeleteRoom
+
+    [Fact]
+    public async Task DeleteRoom_Should_PassCancellationToken_ToRepository()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        var cts = new CancellationTokenSource();
+        var token = cts.Token;
+
+        repoMock.Setup(r => r.GetById(It.IsAny<Guid>(), token))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+
+        repoMock.Setup(r => r.Delete(It.IsAny<Guid>(), token))
+            .ReturnsAsync(Guid.Empty);
+
+        // Act
+        
+        await sut.DeleteRoom(id, token);
+
+        // Assert
+        repoMock.Verify(r => r.Delete(id, token), Times.Once);
+    }
+    
+    [Fact]
+    public async Task DeleteRoom_Should_ThrowException_WhenRepositoryThrows()
+    {
+        //Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+
+        // for validator to pass
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+        
+        repoMock.Setup(r => r.Delete(
+                It.IsAny<Guid>(),It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("Db connection lost"));
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => sut.DeleteRoom(id, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task DeleteRoom_Should_ReturnValidationError_WhenRoomNotFound()
+    {
+        // Arrange
+        var (sut, repoMock) = CreateSut();
+        var id =  Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Room?)null);
+        
+        // Act
+        var result = await sut.DeleteRoom(id, CancellationToken.None);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains(RoomErrors.RoomNotFound, result.Errors);
+        repoMock.Verify(r => r.Delete(id,  It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteRoom_Should_ReturnResult()
+    {
+        //Arrange
+        var (sut, repoMock) = CreateSut();
+        var id = Guid.NewGuid();
+        
+        repoMock.Setup(r => r.GetById(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Room.Create(id, "Room1", 10, true, true, true).room);
+        
+        repoMock.Setup(r => r.Delete(id, CancellationToken.None))
+            .ReturnsAsync(id);
+        
+        // Act
+        var result = await sut.DeleteRoom(id, CancellationToken.None);
+
+        // Assert 
+        Assert.False(result.IsFailure);
+        Assert.Empty(result.Errors);
+        repoMock.Verify(r => r.Delete(id, CancellationToken.None), Times.Once);
+    }
+    
     #endregion
 }
