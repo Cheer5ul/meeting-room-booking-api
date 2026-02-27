@@ -41,7 +41,11 @@ public static class UserErrors
         "User.IncorrectPassword",
         "Incorrect password");
 
-    public static Error InvalidId => new(
-        "User.InvalidId",
-        "Invalid id");
+    // public static Error InvalidId => new(
+    //     "User.InvalidId",
+    //     "Invalid id");
+    
+    public static Error EmptyId => new Error(
+        "User.EmptyId",
+        "Id is empty");
 }

@@ -37,6 +37,17 @@ public class UserService(
     public async Task<Result<Core.Models.User.User?>> GetUserById(Guid id, CancellationToken cancellationToken = default)
     {
         
+        logger.LogInformation("{@MethodName}: Getting user by id {@Id}",
+            nameof(GetUserById), id);
+        
+        // fast check | maybe should be even in the controller | NEEDS REFACTOR
+        if (id == Guid.Empty)
+        {
+            logger.LogInformation("{@MethodName}: Getting user with an empty id {@UserId}",
+                nameof(GetUserById), id);
+            return Result<Core.Models.User.User?>.Failures([UserErrors.EmptyId]);
+        }
+        
         logger.LogInformation("{@MethodName}: Getting user by id: {@UserId}", nameof(GetUserById), id);
         var user = await userRepository.GetById(id, cancellationToken);
         

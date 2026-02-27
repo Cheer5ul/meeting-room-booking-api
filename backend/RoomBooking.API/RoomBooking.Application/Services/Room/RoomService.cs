@@ -25,13 +25,13 @@ public class RoomService(IRoomRepository repository,
 
     public async Task<Result<Core.Models.Room.Room?>> GetRoomById(Guid id, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("{@MethodName}: Getting room with by {@Id}",
+        logger.LogInformation("{@MethodName}: Getting room by id {@Id}",
             nameof(GetRoomById), id);
         
         // fast check | maybe should be even in the controller | NEEDS REFACTOR
         if (id == Guid.Empty)
         {
-            logger.LogInformation("{@MethodName}: Getting user with an empty id {@UserId}",
+            logger.LogInformation("{@MethodName}: Getting room with an empty id {@UserId}",
                 nameof(GetRoomById), id);
             return Result<Core.Models.Room.Room?>.Failures([RoomErrors.InvalidId]);
         }
