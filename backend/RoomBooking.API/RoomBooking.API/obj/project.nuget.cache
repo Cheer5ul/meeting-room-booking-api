@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zvHrTh2wgWA=",
+  "dgSpecHash": "sC0Lyg2WIWc=",
   "success": true,
   "projectFilePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
   "expectedPackageFiles": [
@@ -91,5 +91,114 @@
     "C:\\Users\\oxyge\\.nuget\\packages\\system.threading.tasks.dataflow\\9.0.0\\system.threading.tasks.dataflow.9.0.0.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\system.windows.extensions\\9.0.0\\system.windows.extensions.9.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-23rf-6693-g89p",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-37gx-xxp4-5rgx",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-6588-8gv4-xfgh",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-8q5v-6pqq-x66h",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-cvvh-rhrc-wg4q",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-g8r8-53c2-pm3f",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-mmjf-rqrv-855v",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'System.Security.Cryptography.Xml' 9.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-w3x6-4m5h-cxqf",
+      "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.API\\RoomBooking.API.csproj",
+      "libraryId": "System.Security.Cryptography.Xml",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }
