@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RoomBooking.Core\RoomBooking.Core.csproj" />
+      <ProjectReference Include="..\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+      <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\User\Dependencies\" />
+    </ItemGroup>
+
+</Project>

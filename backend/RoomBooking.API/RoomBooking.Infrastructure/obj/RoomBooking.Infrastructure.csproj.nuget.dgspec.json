@@ -1,0 +1,319 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj",
+        "projectName": "RoomBooking.Application",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj",
+        "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\oxyge\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "targetAlias": "net10.0",
+            "projectReferences": {
+              "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj"
+              },
+              "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "targetAlias": "net10.0",
+          "dependencies": {
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+        "projectName": "RoomBooking.Core",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj",
+        "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\oxyge\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "targetAlias": "net10.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "targetAlias": "net10.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
+        "projectName": "RoomBooking.DataAccess",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
+        "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\oxyge\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "targetAlias": "net10.0",
+            "projectReferences": {
+              "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Core\\RoomBooking.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
+        "projectName": "RoomBooking.Infrastructure",
+        "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\RoomBooking.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\oxyge\\.nuget\\packages\\",
+        "outputPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\oxyge\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "targetAlias": "net10.0",
+            "projectReferences": {
+              "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj": {
+                "projectPath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.Application\\RoomBooking.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "targetAlias": "net10.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
