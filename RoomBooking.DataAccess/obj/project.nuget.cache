@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "agDsV7zy1EQ=",
+  "dgSpecHash": "Az8y4ILogoQ=",
   "success": true,
-  "projectFilePath": "D:\\RiderProjects\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
+  "projectFilePath": "D:\\RiderProjects\\RoomBooking\\backend\\RoomBooking.API\\RoomBooking.DataAccess\\RoomBooking.DataAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\oxyge\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\oxyge\\.nuget\\packages\\microsoft.build\\17.7.2\\microsoft.build.17.7.2.nupkg.sha512",

@@ -5,27 +5,32 @@ namespace RoomBooking.Core.Models.User;
 
 public class User
 {
-    private User(Guid id, string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
+    private User(
+        Guid id, string name, string email, string department, string passwordHash,
+        List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
         Id = id;
         Name = name;
         Email = email;
         Department = department;
+        PasswordHash = passwordHash;
         Bookings = bookings ?? [];
     }
     public Guid Id { get; }
     public string Name { get; }
     public string Email { get; } 
     public string Department { get; }
+    public string PasswordHash { get; set; }
     
     public AddressInfo? AddressInfo { get; private set;}
     
     public List<Booking.Booking> Bookings { get; set; }
 
     public static Result<User> Create
-        ( string name, string email, string department, List<Booking.Booking>? bookings = default(List<Booking.Booking>))
+        (string name, string email, string department, string passwordHash,
+            List<Booking.Booking>? bookings = default(List<Booking.Booking>))
     {
-        //possible basic validation
+        //possible basic validation ???
         
         var user = new User
         (
@@ -33,6 +38,7 @@ public class User
             name: name,
             email: email,
             department: department,
+            passwordHash: passwordHash,
             bookings: bookings
         );
         
@@ -51,14 +57,15 @@ public class User
         return addressInfo;
     }
 
-    public static User Assebmle(Guid id, string name, string email, string department)
+    public static User Assebmle(Guid id, string name, string email, string department, string passwordHash)
     {
         var user = new User
         (
             id: id,
             name: name,
             email: email,
-            department: department
+            department: department, 
+            passwordHash: passwordHash
         );
         
         return user;

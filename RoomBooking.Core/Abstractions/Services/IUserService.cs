@@ -9,7 +9,10 @@ public interface IUserService
 {
     Task<Result<List<User>>> GetAllUsers(CancellationToken cancellationToken = default);
     Task<Result<User?>> GetUserById(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<Guid>> CreateUser(string name, string email, string department,
+    Task<Result<Guid>> CreateUser(string name, string email, string department, string password,
+        CancellationToken cancellationToken = default);
+
+    Task<Result<string>> Login(string email, string password,
         CancellationToken cancellationToken = default);
 
     Task<Result<ITuple>> UpdateUser(Guid id, string name, string email, string department, 

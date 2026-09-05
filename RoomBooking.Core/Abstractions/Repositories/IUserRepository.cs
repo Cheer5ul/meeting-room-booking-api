@@ -8,6 +8,7 @@ public interface IUserRepository
 {
     Task<List<User>> Get(CancellationToken cancellationToken = default);
     Task<User?> GetById(Guid id, CancellationToken cancellationToken = default);
+    Task<User?> GetByEmail(string email, CancellationToken cancellationToken = default);
     Task<Guid> Create(User user, CancellationToken cancellationToken = default);
 
     Task<ITuple> Update(Guid id, string name, string email, string department, 

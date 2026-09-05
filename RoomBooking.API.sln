@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.DataAccess", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.Application", "RoomBooking.Application\RoomBooking.Application.csproj", "{A1491B0D-B3FD-4199-AA23-035833DD7865}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomBooking.Infrastructure", "RoomBooking.Infrastructure\RoomBooking.Infrastructure.csproj", "{5368A7D7-1FD8-4036-9A3C-F2BAA84C96A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{A1491B0D-B3FD-4199-AA23-035833DD7865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1491B0D-B3FD-4199-AA23-035833DD7865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1491B0D-B3FD-4199-AA23-035833DD7865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5368A7D7-1FD8-4036-9A3C-F2BAA84C96A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5368A7D7-1FD8-4036-9A3C-F2BAA84C96A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5368A7D7-1FD8-4036-9A3C-F2BAA84C96A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5368A7D7-1FD8-4036-9A3C-F2BAA84C96A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

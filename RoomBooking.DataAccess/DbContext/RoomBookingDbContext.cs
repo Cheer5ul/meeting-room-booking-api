@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using RoomBooking.DataAccess.Configurations;
-using RoomBooking.DataAccess.Entities;
 using RoomBooking.DataAccess.Entities.BookingEntity;
 using RoomBooking.DataAccess.Entities.RoomEntity;
 using RoomBooking.DataAccess.Entities.UserEntity;
@@ -34,8 +32,9 @@ public class RoomBookingDbContext : Microsoft.EntityFrameworkCore.DbContext
     // {
     //     if (!optionsBuilder.IsConfigured)
     //     {
-    //         var connectionString =;
-    //
+    //         var connectionString =
+    //             ;
+    //     
     //         if (string.IsNullOrEmpty(connectionString))
     //         {
     //             throw new InvalidOperationException(

@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\RoomBooking.Application\RoomBooking.Application.csproj" />
       <ProjectReference Include="..\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
+      <ProjectReference Include="..\RoomBooking.Infrastructure\RoomBooking.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
